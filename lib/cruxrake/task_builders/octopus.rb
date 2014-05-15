@@ -1,3 +1,4 @@
+require 'active_support/core_ext/string'
 require 'active_support/core_ext/array'
 require 'albacore'
 require 'albacore/nuget_model'
@@ -41,6 +42,8 @@ module CruxRake
       nuget = @solution.nuget
 
       task = Rake::Task.define_task :publish => [ :package ] do
+        raise ArgumentError, 'You must specify an :api_key to connect to the server' if options.api_key.blank?
+
         options.apps.each do |a|
           sh "#{nuget.exe} push #{nuget.build_location}/#{a.project}.#{ENV['NUGET_VERSION']}.nupkg -ApiKey #{options.api_key} -Source #{options.server}"
         end

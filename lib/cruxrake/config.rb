@@ -195,7 +195,6 @@ module CruxRake
 
     def opts
       raise ArgumentError, 'You must specify a :server to deploy to' if @server.blank?
-      raise ArgumentError, 'You must specify an :api_key to connect to the server' unless @api_key.blank?
       raise ArgumentError, 'You must specify at least one application to deploy' if apps.blank?
 
       Map.new({
