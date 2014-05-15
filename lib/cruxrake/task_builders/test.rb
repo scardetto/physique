@@ -8,7 +8,7 @@ module CruxRake
       configuration = @solution.compile.configuration
       package_dir = @solution.nuget.restore_location
 
-      task = test_runner_task :test => [ :build, 'db:rebuild' ] do |tests|
+      task = test_runner_task :test => [ :compile, 'db:rebuild' ] do |tests|
         tests.files = FileList["**/*.Tests/bin/#{configuration}/*.Tests.dll"]
         tests.exe = locate_tool("#{package_dir}/NUnit.Runners.*/tools/nunit-console.exe")
       end
