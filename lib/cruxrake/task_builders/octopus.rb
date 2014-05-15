@@ -1,4 +1,5 @@
 require 'active_support/core_ext/array'
+require 'albacore'
 require 'albacore/nuget_model'
 
 module CruxRake
@@ -7,9 +8,16 @@ module CruxRake
       options = @solution.octopus
       return if options.apps.blank?
 
+      add_package_tasks(options)
+      add_deploy_tasks(options)
+    end
+
+    private
+
+    def add_package_tasks(options)
       options.apps.each do |a|
         namespace :package do
-          task = octopus_pack_task a.name => [ :versionizer, :compile ] do |o|
+          task = octopus_pack_task a.name => [:versionizer, :test] do |o|
             o.project_file = a.project_file
             o.type = a.type
             o.version = ENV['NUGET_VERSION'] # from versionizer task
@@ -25,10 +33,19 @@ module CruxRake
       task.add_description 'Package all applications'
     end
 
-    private
-
     def all_package_tasks(options)
       options.apps.map { |a| "package:#{a.name}" }
+    end
+
+    def add_deploy_tasks(options)
+      nuget = @solution.nuget
+
+      task = Rake::Task.define_task :publish => [ :package ] do
+        options.apps.each do |a|
+          sh "#{nuget.exe} push #{nuget.build_location}/#{a.project}.#{ENV['NUGET_VERSION']}.nupkg -ApiKey #{options.api_key} -Source #{options.server}"
+        end
+      end
+      task.add_description 'Publish apps to Octopus Server'
     end
   end
 end
