@@ -28,6 +28,11 @@ module CruxRake
 
     private
 
+    def add_default_tasks
+      Rake::Task.define_task :default => [ :test ]
+      Rake::Task.define_task :ci => [ :versionizer, :test ]
+    end
+
     def namespace(name, &block)
       name = name.to_s if name.kind_of?(Symbol)
       name = name.to_str if name.respond_to?(:to_str)
