@@ -19,6 +19,8 @@ module CruxRake
       options.apps.each do |a|
         namespace :package do
           task = octopus_pack_task a.name => [:versionizer, :test] do |o|
+            ensure_output_location
+
             o.project_file = a.project_file
             o.type = a.type
             o.version = ENV['NUGET_VERSION'] # from versionizer task
@@ -36,6 +38,11 @@ module CruxRake
 
     def all_package_tasks(options)
       options.apps.map { |a| "package:#{a.name}" }
+    end
+
+    def ensure_output_location
+      # Ensure output directory exists
+      FileUtils.mkdir_p @solution.nuget.build_location
     end
 
     def add_deploy_tasks(options)
