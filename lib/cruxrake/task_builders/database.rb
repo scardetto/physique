@@ -3,6 +3,9 @@ require 'cruxrake/project'
 module CruxRake
   module DatabaseTasksBuilder
     def add_database_tasks
+      options = @solution.migrator
+      return if options.nil?
+
       add_script_tasks
       add_default_tasks
       add_migrator_tasks

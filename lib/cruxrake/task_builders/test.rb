@@ -8,11 +8,17 @@ module CruxRake
       configuration = @solution.compile.configuration
       package_dir = @solution.nuget.restore_location
 
-      task = test_runner_task :test => [ :compile, 'db:rebuild' ] do |tests|
+      task = test_runner_task :test => test_dependencies do |tests|
         tests.files = FileList["**/*.Tests/bin/#{configuration}/*.Tests.dll"]
         tests.exe = locate_tool("#{package_dir}/NUnit.Runners.*/tools/nunit-console.exe")
       end
       task.add_description 'Run unit tests'
+    end
+
+    def test_dependencies
+      dependencies = [ :compile ]
+      dependencies << 'db:rebuild' unless @solution.migrator.nil?
+      dependencies
     end
   end
 end

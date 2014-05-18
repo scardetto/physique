@@ -7,6 +7,7 @@ module CruxRake
   module OctopusTasksBuilder
     def add_octopus_tasks
       options = @solution.octopus
+      return if options.nil?
       return if options.apps.blank?
 
       add_package_tasks(options)
