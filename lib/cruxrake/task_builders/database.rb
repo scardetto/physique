@@ -6,8 +6,8 @@ module CruxRake
       options = @solution.migrator
       return if options.nil?
 
-      add_script_tasks
-      add_default_tasks
+      add_script_tasks options
+      add_default_db_tasks options
       add_migrator_tasks
       add_workflow_tasks
       add_new_migration_task
@@ -15,9 +15,7 @@ module CruxRake
 
     private
 
-    def add_script_tasks
-      options = @solution.migrator
-
+    def add_script_tasks(options)
       FileList["#{options.scripts_dir}/*.sql"].each do |f|
         namespace :db do
           task_name = File.basename(f, '.*')
@@ -31,16 +29,16 @@ module CruxRake
       end
     end
 
-    def add_default_tasks
-      options = @solution.migrator
-
+    def add_default_db_tasks(options)
       default_tasks(options.name).each do |task_name,sql|
-        unless Rake::Task.task_defined? "db:#{task_name}"
-          task = sqlcmd_task task_name do |s|
-            s.command = sql
-            s.server = options.instance
+        unless Rake::Task.task_defined? "db:#{task_name.to_s}"
+          namespace :db do
+            task = sqlcmd_task task_name do |s|
+              s.command = sql
+              s.server = options.instance
+            end
+            task.add_description get_script_task_description(task_name, options.scripts_dir)
           end
-          task.add_description get_script_task_description(task_name, options.scripts_dir)
         end
       end
     end
@@ -48,7 +46,7 @@ module CruxRake
     def default_tasks(database)
       { create: "CREATE DATABASE #{database}",
         drop: "DROP DATABASE #{database}",
-        seed: 'SELECT 1'} # This is a no-op
+        seed: 'SELECT 1' } # This is a no-op
     end
 
     def get_script_task_description(task, dir)
