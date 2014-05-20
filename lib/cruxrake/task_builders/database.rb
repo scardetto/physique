@@ -1,7 +1,10 @@
+require 'cruxrake/tool_locator'
 require 'cruxrake/project'
 
 module CruxRake
   module DatabaseTasksBuilder
+    include CruxRake::ToolLocator
+
     def add_database_tasks
       options = @solution.migrator
       return if options.nil?
@@ -35,7 +38,7 @@ module CruxRake
           namespace :db do
             task = sqlcmd_task task_name do |s|
               s.command = sql
-              s.server = options.instance
+              s.server_name = options.instance
             end
             task.add_description get_script_task_description(task_name, options.scripts_dir)
           end
@@ -99,7 +102,7 @@ module CruxRake
         task = Rake::Task.define_task :rebuild => [ :drop, :setup ]
         task.add_description 'Drop and recreate the database'
       end
-    end
+    endgit st
 
     def add_fluent_migrator_task(*args, &block)
       fluent_migrator_task *args do |m|
@@ -113,7 +116,7 @@ module CruxRake
       config.database = @solution.migrator.name
       config.task = 'migrate:up'
       config.dll = migration_dll
-      config.exe = tool_in_output_folder || tool_in_nuget_package
+      config.exe = locate_tool(tool_in_output_folder || tool_in_nuget_package)
       config.output_to_file
     end
 
@@ -126,11 +129,16 @@ module CruxRake
     end
 
     def tool_in_nuget_package
-      existing_path "#{@solution.nuget.restore_location}/FluentMigrator.Tools.*/tools/AnyCPU/40/Migrate.exe"
+      existing_path "#{@solution.nuget.restore_location}/FluentMigrator.*/tools/Migrate.exe"
     end
 
     def existing_path(path)
-      path if File.exists? path
+      return path if any_file_exists? path
+      nil
+    end
+
+    def any_file_exists?(path)
+      FileList[path].any? { |p| File.exists? p}
     end
 
     def add_new_migration_task
