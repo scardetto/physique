@@ -102,7 +102,7 @@ module CruxRake
         task = Rake::Task.define_task :rebuild => [ :drop, :setup ]
         task.add_description 'Drop and recreate the database'
       end
-    endgit st
+    end
 
     def add_fluent_migrator_task(*args, &block)
       fluent_migrator_task *args do |m|
