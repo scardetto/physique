@@ -24,6 +24,7 @@ module CruxRake
       add_database_tasks
       add_test_tasks
       add_octopus_tasks
+      add_default_tasks
     end
 
     private
