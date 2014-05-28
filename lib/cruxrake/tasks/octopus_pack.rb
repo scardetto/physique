@@ -55,6 +55,7 @@ module CruxRake
           add_content_files
           add_binary_files target: 'bin'
         else
+          add_content_files
           add_binary_files
         end
 
@@ -132,7 +133,7 @@ module CruxRake
 
         output_path = get_output_path
         Dir.new(get_absolute_output_path).entries.
-          keep_if { |f| f =~ /^.*\.(ps1|dll|exe|pdb|config)$/i}.
+          keep_if { |f| f =~ /^.*\.(dll|exe|pdb|config)$/i}.
           each { |f| @package.add_file bin_target(output_path, f), bin_target(target, f) }
       end
 

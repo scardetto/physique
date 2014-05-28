@@ -39,6 +39,7 @@ module CruxRake
             task = sqlcmd_task task_name do |s|
               s.command = sql
               s.server_name = options.instance
+              s.set_variable 'DATABASE_NAME', options.name
             end
             task.add_description get_script_task_description(task_name, options.scripts_dir)
           end
