@@ -10,7 +10,7 @@ module CruxRake
 
       task = test_runner_task :test => test_dependencies do |tests|
         tests.files = FileList["**/*.Tests/bin/#{configuration}/*.Tests.dll"]
-        tests.exe = locate_tool("#{package_dir}/NUnit.Runners.*/tools/nunit-console.exe")
+        tests.exe = locate_tool("#{package_dir}/NUnit.Runners.*/tools/nunit-console.exe /trace=Verbose /labels")
       end
       task.add_description 'Run unit tests'
     end
