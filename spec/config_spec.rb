@@ -1,4 +1,4 @@
-require 'cruxrake/config'
+require 'cruxrake'
 
 describe CruxRake::FluentMigratorConfig do
   it 'should find full project path when specifying the name and language' do

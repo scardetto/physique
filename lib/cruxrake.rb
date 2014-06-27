@@ -1,6 +1,3 @@
-require 'cruxrake/version'
-require 'cruxrake/solution'
-
 # ***************************************** #
 #                                 _         #
 #   ___ _ __ _   ___  ___ __ __ _| | _____  #
@@ -12,3 +9,13 @@ require 'cruxrake/solution'
 
 module CruxRake
 end
+
+require 'active_support/core_ext/string'
+require 'active_support/core_ext/array'
+require 'albacore'
+require 'albacore/dsl'
+require 'albacore/config_dsl'
+require 'albacore/nuget_model'
+require 'cruxrake/version'
+require 'cruxrake/dsl'
+require 'cruxrake/solution'

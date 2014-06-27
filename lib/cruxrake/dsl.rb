@@ -1,5 +1,7 @@
+require 'albacore/dsl'
+
 # Reopen Albacore DSL to get at the pre-built tasks
-# There is probably a better way to do this but ```me == ruby_noob```
+# There is probably a better way to do this but ```me == :ruby_noob```
 module Albacore
   module DSL
     def asmver_task(*args, &block)
@@ -26,6 +28,10 @@ module Albacore
       fluent_migrator *args, &block
     end
 
+    def nugets_pack_task(*args, &block)
+      nugets_pack *args, &block
+    end
+
     def octopus_pack_task(*args, &block)
       octopus_pack *args, &block
     end
@@ -38,7 +44,7 @@ module Albacore
 
       Albacore.define_task *args do
         c = CruxRake::SqlCmd::Config.new
-        block.call c
+        yield c
         CruxRake::SqlCmd::Task.new(c.opts).execute
       end
     end
@@ -49,7 +55,7 @@ module Albacore
 
       Albacore.define_task *args do
         c = CruxRake::FluentMigrator::Config.new
-        block.call c
+        yield c
         CruxRake::FluentMigrator::Task.new(c.opts).execute
       end
     end
@@ -60,7 +66,7 @@ module Albacore
 
       Albacore.define_task *args do
         c = CruxRake::OctopusPack::Config.new
-        block.call c
+        yield c
         CruxRake::OctopusPack::Task.new(c.opts).execute
       end
     end

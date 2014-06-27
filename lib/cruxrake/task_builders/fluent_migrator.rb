@@ -1,16 +1,47 @@
-require 'cruxrake/tool_locator'
 require 'cruxrake/project'
 
 module CruxRake
-  module DatabaseTasksBuilder
-    include CruxRake::ToolLocator
+  class FluentMigratorConfig
+    self.extend Albacore::ConfigDSL
+    include Albacore::Logging
 
-    def add_database_tasks
-      options = @solution.migrator
-      return if options.nil?
+    # Project name or path
+    attr_path :project
 
-      add_script_tasks options
-      add_default_db_tasks options
+    attr_writer :lang,        # Programming language of the db project
+                :instance,    # Server instance name
+                :name,        # Database name
+                :scripts_dir, # Scripts folder to examine to create tasks
+                :dialect      # Dialect to use for generating SQL
+
+    def initialize
+      @lang = :cs
+      @scripts_dir = '_Scripts'
+    end
+
+    def opts
+      Map.new({
+        exe: @exe,
+        instance: @instance,
+        name: @name,
+        project: @project,
+        project_file: CruxRake::Project.get_path(@project, @lang),
+        lang: @lang,
+      }).apply(
+        lang: :cs,
+        project_dir: "src/#{@project}",
+        scripts_dir: "src/#{@project}/#{@scripts_dir}"
+      )
+    end
+  end
+
+  class FluentMigratorTasksBuilder < TasksBuilder
+    def build_tasks
+      @options = solution.migrator
+      return if @options.nil?
+
+      add_script_tasks
+      add_default_db_tasks
       add_migrator_tasks
       add_workflow_tasks
       add_new_migration_task
@@ -18,30 +49,30 @@ module CruxRake
 
     private
 
-    def add_script_tasks(options)
-      FileList["#{options.scripts_dir}/*.sql"].each do |f|
+    def add_script_tasks
+      FileList["#{@options.scripts_dir}/*.sql"].each do |f|
         namespace :db do
           task_name = File.basename(f, '.*')
           task = sqlcmd_task task_name do |s|
             s.file = f
-            s.server_name = options.instance
-            s.set_variable 'DATABASE_NAME', options.name
+            s.server_name = @options.instance
+            s.set_variable 'DATABASE_NAME', @options.name
           end
-          task.add_description get_script_task_description(task_name, options.scripts_dir)
+          task.add_description get_script_task_description(task_name, @options.scripts_dir)
         end
       end
     end
 
-    def add_default_db_tasks(options)
-      default_tasks(options.name).each do |task_name,sql|
+    def add_default_db_tasks
+      default_tasks(@options.name).each do |task_name,sql|
         unless Rake::Task.task_defined? "db:#{task_name.to_s}"
           namespace :db do
             task = sqlcmd_task task_name do |s|
               s.command = sql
-              s.server_name = options.instance
-              s.set_variable 'DATABASE_NAME', options.name
+              s.server_name = @options.instance
+              s.set_variable 'DATABASE_NAME', @options.name
             end
-            task.add_description get_script_task_description(task_name, options.scripts_dir)
+            task.add_description get_script_task_description(task_name, @options.scripts_dir)
           end
         end
       end
@@ -70,23 +101,30 @@ module CruxRake
       namespace :db do
         build_task :compile_db do |b|
           b.target = [ 'Build' ]
-          b.file = @solution.migrator.project_file
-          b.prop 'Configuration', @solution.compile.configuration
-          b.logging = @solution.compile.logging
+          b.file = solution.migrator.project_file
+          b.prop 'Configuration', solution.compile.configuration
+          b.logging = solution.compile.logging
         end
 
+        block = lambda &method(:configure_migration)
+
         # Migrate up
-        task = add_fluent_migrator_task :migrate => [ :compile_db ] do |m|
-          m.task = 'migrate:up'
-        end
+        task = fluent_migrator_task :migrate => [ :compile_db ], &block.curry.('migrate:up')
         task.add_description 'Migrate database to the latest version'
 
         # Migrate down
-        task = add_fluent_migrator_task :rollback => [ :compile_db ] do |m|
-          m.task = 'rollback'
-        end
+        task = fluent_migrator_task :rollback => [ :compile_db ], &block.curry.('rollback')
         task.add_description 'Rollback the database to the previous version'
       end
+    end
+
+    def configure_migration(task, config)
+      config.instance = solution.migrator.instance
+      config.database = solution.migrator.name
+      config.task = task
+      config.dll = migration_dll
+      config.exe = locate_tool(tool_in_output_folder || tool_in_nuget_package)
+      config.output_to_file
     end
 
     def add_workflow_tasks
@@ -105,41 +143,21 @@ module CruxRake
       end
     end
 
-    def add_fluent_migrator_task(*args, &block)
-      fluent_migrator_task *args do |m|
-        configure_migration m
-        block.call m
-      end
-    end
-
-    def configure_migration(config)
-      config.instance = @solution.migrator.instance
-      config.database = @solution.migrator.name
-      config.task = 'migrate:up'
-      config.dll = migration_dll
-      config.exe = locate_tool(tool_in_output_folder || tool_in_nuget_package)
-      config.output_to_file
-    end
-
     def migration_dll
-      "#{@solution.migrator.project_dir}/bin/#{@solution.compile.configuration}/#{@solution.migrator.project}.dll"
+      "#{solution.migrator.project_dir}/bin/#{solution.compile.configuration}/#{solution.migrator.project}.dll"
     end
 
     def tool_in_output_folder
-      existing_path "#{@solution.migrator.project_dir}/bin/#{@solution.compile.configuration}/Migrate.exe"
+      existing_path "#{solution.migrator.project_dir}/bin/#{solution.compile.configuration}/Migrate.exe"
     end
 
     def tool_in_nuget_package
-      existing_path "#{@solution.nuget.restore_location}/FluentMigrator.*/tools/Migrate.exe"
+      existing_path "#{solution.nuget.restore_location}/FluentMigrator.*/tools/Migrate.exe"
     end
 
     def existing_path(path)
-      return path if any_file_exists? path
+      return path if FileList[path].any? { |p| File.exists? p }
       nil
-    end
-
-    def any_file_exists?(path)
-      FileList[path].any? { |p| File.exists? p}
     end
 
     def add_new_migration_task
@@ -154,7 +172,7 @@ module CruxRake
             ].join "\n\n"
           end
 
-          project, project_dir, project_file = @solution.migrator.project, @solution.migrator.project_dir, @solution.migrator.project_file
+          project, project_dir, project_file = solution.migrator.project, solution.migrator.project_dir, solution.migrator.project_file
           version = migration_version
           migration_file_name = "#{version}_#{name}.cs"
           migration_content = migration_template(version, name, description, project)
@@ -203,7 +221,7 @@ TEMPLATE
 
     def save_file(content, file_path)
       raise "#{file_path} already exists, cancelling" if File.exists? file_path
-      File.open(file_path, "w") { |f| f.write(content) }
+      File.open(file_path, 'w') { |f| f.write(content) }
     end
   end
 end

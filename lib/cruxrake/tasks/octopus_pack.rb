@@ -6,7 +6,6 @@ module CruxRake
     class Config
       attr_writer :project_file
       attr_writer :type
-      attr_writer :version
       attr_writer :configuration
       attr_writer :exe
       attr_writer :out
@@ -15,14 +14,13 @@ module CruxRake
 
       def opts
         raise ArgumentError, 'You must specify a project file' if @project_file.blank?
-        raise ArgumentError, 'You must specify a version' if @version.blank?
+        raise ArgumentError, 'You must specify a version' if @metadata.version.blank?
         raise ArgumentError, 'You must specify the NuGet executable' if @exe.blank?
         raise ArgumentError, 'You must specify an output folder' if @out.blank?
 
         Map.new({
           project_file: @project_file,
           type: @type,
-          version: @version,
           configuration: @configuration,
           exe: @exe,
           out: @out,
@@ -44,10 +42,8 @@ module CruxRake
         @opts = opts
         @project = Albacore::Project.new opts.project_file
 
-        metadata = opts.metadata || build_metadata
-        metadata.id = @project.name if @project.name
-
-        @package = Albacore::NugetModel::Package.new metadata
+        opts.metadata.id = @project.name if @project.name
+        @package = Albacore::NugetModel::Package.new opts.metadata
       end
 
       def execute
@@ -66,15 +62,6 @@ module CruxRake
       end
 
       private
-
-      def build_metadata
-        Albacore::NugetModel::Metadata.new.tap do |m|
-          # Set required fields
-          m.authors = @project.authors || 'MISSING'
-          m.version = @opts.version || 'MISSING'
-          m.description = 'MISSING'
-        end
-      end
 
       def write_nuspec!
         raise ArgumentError, "no nuspec metadata id, project at path: #{@project.proj_path_base}, nuspec: #{@package.inspect}" unless @package.metadata.id
@@ -152,7 +139,3 @@ module CruxRake
     end
   end
 end
-
-
-
-
