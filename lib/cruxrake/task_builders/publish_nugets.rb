@@ -51,6 +51,8 @@ module CruxRake
 
     def add_package_nugets_task
       task = nugets_pack_task :package => [ :versionizer, :test ] do |p|
+        ensure_output_location solution.nuget.build_location
+
         p.configuration = solution.compile.configuration
         p.out           = solution.nuget.build_location
         p.exe           = solution.nuget.exe

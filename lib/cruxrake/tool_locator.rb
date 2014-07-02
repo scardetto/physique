@@ -16,10 +16,13 @@ module CruxRake
     #
     # Throws a ToolNotFoundError if no tool could be found.
     def locate_tool(paths, options = {})
+      # FileList only correctly handles forward-slashes, even on Windows
+      paths = paths.gsub('\\', '/')
+
+      info { "Extracting paths from the following pattern #{paths}" }
       paths = FileList[paths] unless paths.respond_to?(:each)
 
       info { "Attempting to locate tool in the following paths #{paths}" }
-
       opts = Map.options(options)
       opts = opts.apply :reverse => true
       paths = paths.collect { |p| which(p) }.compact.sort
@@ -34,7 +37,6 @@ module CruxRake
       Albacore::CrossPlatformCmd.which(exe) ? exe : nil;
     end
 
-    class ToolNotFoundError < Exception
-    end
+    class ToolNotFoundError < Exception; end
   end
 end
