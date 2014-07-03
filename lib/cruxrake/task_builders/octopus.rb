@@ -101,10 +101,10 @@ module CruxRake
             end
             task.add_description "Create the Octopus deployment package for #{a.project}"
           end
-        end
 
-        task = Rake::Task.define_task :package => all_octopus_package_tasks
-        task.add_description 'Package all applications'
+          task = Rake::Task.define_task :package => all_octopus_package_tasks
+          task.add_description 'Package all applications'
+        end
       end
     end
 
