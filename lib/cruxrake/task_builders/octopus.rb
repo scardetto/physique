@@ -9,6 +9,12 @@ module CruxRake
 
     def initialize
       @apps = []
+      @alias_tasks = true
+    end
+
+    # Do not alias the tasks without the 'octo' prefix.
+    def no_alias_tasks
+      @alias_tasks = false
     end
 
     def deploy_app
@@ -18,12 +24,13 @@ module CruxRake
     end
 
     def opts
-      raise ArgumentError, 'You must specify a :server to deploy to' if @server.blank?
+      raise ArgumentError, 'You must specify a server to deploy to' if @server.blank?
       raise ArgumentError, 'You must specify at least one application to deploy' if @apps.blank?
 
       Map.new({
         server: @server,
         api_key: @api_key,
+        alias_tasks: @alias_tasks,
         apps: @apps.map { |a| a.opts }
       })
     end
@@ -69,46 +76,62 @@ module CruxRake
       return if @options.apps.blank?
 
       add_octopus_package_tasks
-      add_octopus_deploy_tasks
+      add_octopus_publish_tasks
+
+      if @options.alias_tasks
+        add_task_aliases
+      end
     end
 
     private
 
     def add_octopus_package_tasks
       @options.apps.each do |a|
-        namespace :package do
-          task = octopus_pack_task a.name => [:versionizer, :test] do |o|
-            ensure_output_location solution.nuget.build_location
+        namespace :octo do
+          namespace :package do
+            task = octopus_pack_task a.name => [:versionizer, :test] do |o|
+              ensure_output_location solution.nuget.build_location
 
-            o.project_file = a.project_file
-            o.type = a.type
-            o.configuration = solution.compile.configuration
-            o.exe = solution.nuget.exe
-            o.out = solution.nuget.build_location
-            o.metadata = a.metadata
+              o.project_file = a.project_file
+              o.type = a.type
+              o.configuration = solution.compile.configuration
+              o.exe = solution.nuget.exe
+              o.out = solution.nuget.build_location
+              o.metadata = a.metadata
+            end
+            task.add_description "Create the Octopus deployment package for #{a.project}"
           end
-          task.add_description "Create the Octopus deployment package for #{a.project}"
         end
-      end
 
-      task = Rake::Task.define_task :package => all_octopus_package_tasks
-      task.add_description 'Package all applications'
+        task = Rake::Task.define_task :package => all_octopus_package_tasks
+        task.add_description 'Package all applications'
+      end
     end
 
     def all_octopus_package_tasks
       @options.apps.map { |a| "package:#{a.name}" }
     end
 
-    def add_octopus_deploy_tasks
+    def add_octopus_publish_tasks
       nuget = solution.nuget
 
-      task = Rake::Task.define_task :publish => [ :package ] do
-        raise ArgumentError, 'You must specify an :api_key to connect to the server' if @options.api_key.blank?
+      namespace :octo do
+        task = Rake::Task.define_task :publish => [ 'octo:package' ] do
+          raise ArgumentError, 'You must specify an :api_key to connect to the server' if @options.api_key.blank?
 
-        @options.apps.each do |a|
-          sh "#{nuget.exe} push #{nuget.build_location}/#{a.project}.#{a.metadata.version}.nupkg -ApiKey #{@options.api_key} -Source #{@options.server}"
+          @options.apps.each do |a|
+            sh "#{nuget.exe} push #{nuget.build_location}/#{a.project}.#{a.metadata.version}.nupkg -ApiKey #{@options.api_key} -Source #{@options.server}"
+          end
         end
+        task.add_description 'Publish apps to Octopus Server'
       end
+    end
+
+    def add_task_aliases
+      task = Rake::Task.define_task :package => [ 'octo:package' ]
+      task.add_description 'Package all applications'
+
+      task = Rake::Task.define_task :publish => [ 'octo:publish' ]
       task.add_description 'Publish apps to Octopus Server'
     end
   end

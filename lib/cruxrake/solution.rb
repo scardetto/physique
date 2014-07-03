@@ -37,13 +37,11 @@ module CruxRake
     alias_method :database, :fluently_migrate
 
     def octopus_deploy
-      raise 'Cannot deploy to Octopus when configure to deploy NuGet packages' unless @octopus.nil?
       @octopus = OctopusDeployConfig.new
       yield @octopus
     end
 
     def publish_nugets
-      raise 'Cannot deploy NuGet packages when deploying to Octopus' unless @octopus.nil?
       @publish_nugets = PublishNugetsConfig.new
       yield @publish_nugets
     end
