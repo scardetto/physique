@@ -34,7 +34,6 @@ module CruxRake
         api_key: @api_key,
         alias_tasks: @alias_tasks
       ).apply(
-        exclude: /Tests/,
         local_path: 'C:/Nuget.Local'
       )
     end

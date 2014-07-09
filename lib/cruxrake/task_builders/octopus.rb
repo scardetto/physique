@@ -99,32 +99,36 @@ module CruxRake
               o.out = solution.nuget.build_location
               o.metadata = a.metadata
             end
-            task.add_description "Create the Octopus deployment package for #{a.project}"
+            task.add_description "Package #{a.project} for Octopus deployment"
           end
 
-          task = Rake::Task.define_task :package => all_octopus_package_tasks
+          task = Rake::Task.define_task :package => all_octopus_app_tasks('package')
           task.add_description 'Package all applications'
         end
       end
     end
 
-    def all_octopus_package_tasks
-      @options.apps.map { |a| "package:#{a.name}" }
-    end
-
     def add_octopus_publish_tasks
       nuget = solution.nuget
 
-      namespace :octo do
-        task = Rake::Task.define_task :publish => [ 'octo:package' ] do
-          raise ArgumentError, 'You must specify an :api_key to connect to the server' if @options.api_key.blank?
-
-          @options.apps.each do |a|
-            sh "#{nuget.exe} push #{nuget.build_location}/#{a.project}.#{a.metadata.version}.nupkg -ApiKey #{@options.api_key} -Source #{@options.server}"
+      @options.apps.each do |a|
+        namespace :octo do
+          namespace :publish do
+            task = Rake::Task.define_task a.name => [ "package:#{a.name}" ] do
+              sh "#{nuget.exe} push #{nuget.build_location}/#{a.project}.#{a.metadata.version}.nupkg -ApiKey #{@options.api_key} -Source #{@options.server}"
+            end
+            task.add_description "Publish #{a.project} app to Octopus Server"
           end
+
+          task = Rake::Task.define_task :publish => all_octopus_app_tasks('publish')
+          task.add_description 'Publish all apps to Octopus Server'
         end
-        task.add_description 'Publish apps to Octopus Server'
       end
+    end
+
+    def all_octopus_app_tasks(task)
+      # It is assumed that this is called within the octo namespace
+      @options.apps.map { |a| "#{task}:#{a.name}" }
     end
 
     def add_task_aliases
