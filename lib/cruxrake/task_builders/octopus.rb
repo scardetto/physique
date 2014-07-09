@@ -53,14 +53,15 @@ module CruxRake
       raise ArgumentError, 'You must specify the :type of project to deploy' if @type.blank?
       raise ArgumentError, "Project :type #{@type} is not supported." unless supported_types.include? @type
 
-      project_file = CruxRake::Project.get_path(@project, @lang)
-      project_name = Albacore::Project.new(project_file).proj_path_base
+      project_file_path = CruxRake::Project.get_path(@project, @lang)
+      _, project_file = File.split project_file_path
+      project_name = File.basename(project_file, '.*')
 
       Map.new({
         type: @type,
         name: @name || @project,
         project: project_name,
-        project_file: project_file,
+        project_file: project_file_path,
         metadata: @metadata
       })
     end
