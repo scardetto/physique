@@ -119,7 +119,8 @@ module CruxRake
         namespace :octo do
           namespace :publish do
             task = Rake::Task.define_task a.name => [ "package:#{a.name}" ] do
-              sh "#{nuget.exe} push #{nuget.build_location}/#{a.project}.#{a.metadata.version}.nupkg -ApiKey #{@options.api_key} -Source #{@options.server}"
+              package_location = Albacore::Paths.normalise_slashes "#{nuget.build_location}/#{a.project}.#{a.metadata.version}.nupkg"
+              sh "#{nuget.exe} push #{package_location} -ApiKey #{@options.api_key} -Source #{@options.server}"
             end
             task.add_description "Publish #{a.project} app to Octopus Server"
           end
