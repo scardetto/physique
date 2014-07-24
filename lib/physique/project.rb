@@ -1,6 +1,6 @@
 require 'albacore/project'
 
-module CruxRake
+module Physique
   module Project
     extend self
 

@@ -1,11 +1,11 @@
-require 'cruxrake/dsl'
-require 'cruxrake/tool_locator'
+require 'physique/dsl'
+require 'physique/tool_locator'
 
-module CruxRake
+module Physique
   class TasksBuilder
     include Albacore::DSL
     include Albacore::Logging
-    include CruxRake::ToolLocator
+    include Physique::ToolLocator
 
     @subclasses = []
 
@@ -55,4 +55,4 @@ module CruxRake
   end
 end
 
-Gem.find_files('cruxrake/task_builders/*.rb').each { |path| require path }
+Gem.find_files('physique/task_builders/*.rb').each { |path| require path }

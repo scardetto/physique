@@ -1,3 +1,3 @@
-module CruxRake
+module Physique
   VERSION = '0.2.0'
 end

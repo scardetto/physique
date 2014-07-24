@@ -40,34 +40,34 @@ module Albacore
 
     # A rake task type for executing sqlcmd
     def sqlcmd(*args, &block)
-      require 'cruxrake/tasks/sqlcmd'
+      require 'physique/tasks/sqlcmd'
 
       Albacore.define_task *args do
-        c = CruxRake::SqlCmd::Config.new
+        c = Physique::SqlCmd::Config.new
         yield c
-        CruxRake::SqlCmd::Task.new(c.opts).execute
+        Physique::SqlCmd::Task.new(c.opts).execute
       end
     end
 
     # A rake task type for executing sqlcmd
     def fluent_migrator(*args, &block)
-      require 'cruxrake/tasks/fluent_migrator'
+      require 'physique/tasks/fluent_migrator'
 
       Albacore.define_task *args do
-        c = CruxRake::FluentMigrator::Config.new
+        c = Physique::FluentMigrator::Config.new
         yield c
-        CruxRake::FluentMigrator::Task.new(c.opts).execute
+        Physique::FluentMigrator::Task.new(c.opts).execute
       end
     end
 
     # A rake task type for executing sqlcmd
     def octopus_pack(*args, &block)
-      require 'cruxrake/tasks/octopus_pack'
+      require 'physique/tasks/octopus_pack'
 
       Albacore.define_task *args do
-        c = CruxRake::OctopusPack::Config.new
+        c = Physique::OctopusPack::Config.new
         yield c
-        CruxRake::OctopusPack::Task.new(c.opts).execute
+        Physique::OctopusPack::Task.new(c.opts).execute
       end
     end
   end

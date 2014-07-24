@@ -1,6 +1,6 @@
-require 'cruxrake/project'
+require 'physique/project'
 
-module CruxRake
+module Physique
   class FluentMigratorConfig
     self.extend Albacore::ConfigDSL
     include Albacore::Logging
@@ -25,7 +25,7 @@ module CruxRake
         instance: @instance,
         name: @name,
         project: @project,
-        project_file: CruxRake::Project.get_path(@project, @lang),
+        project_file: Physique::Project.get_path(@project, @lang),
         lang: @lang,
       }).apply(
         lang: :cs,
@@ -96,7 +96,7 @@ module CruxRake
     end
 
     def add_migrator_tasks
-      require 'cruxrake/tasks/fluent_migrator'
+      require 'physique/tasks/fluent_migrator'
 
       namespace :db do
         build_task :compile_db do |b|

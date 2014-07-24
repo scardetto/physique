@@ -1,9 +1,9 @@
 require 'active_support/core_ext/string'
 require 'albacore'
 require 'albacore/cmd_config'
-require 'cruxrake/tool_locator'
+require 'physique/tool_locator'
 
-module CruxRake
+module Physique
   module SqlCmd
     class Cmd
       include Albacore::CrossPlatformCmd
@@ -37,7 +37,7 @@ module CruxRake
 
     class Config
       include Albacore::CmdConfig
-      include CruxRake::ToolLocator
+      include Physique::ToolLocator
       self.extend Albacore::ConfigDSL
 
       # The database server
@@ -99,7 +99,7 @@ module CruxRake
 
     class Task
       def initialize(opts)
-        @cmd = CruxRake::SqlCmd::Cmd.new opts
+        @cmd = Physique::SqlCmd::Cmd.new opts
       end
 
       def execute

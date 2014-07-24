@@ -1,8 +1,8 @@
-require 'cruxrake'
+require 'physique'
 
-include CruxRake::ToolLocator
+include Physique::ToolLocator
 
-describe CruxRake::ToolLocator do
+describe Physique::ToolLocator do
   if ::Rake::Win32.windows?
     it 'should find tools on the path' do
       result = which('ruby')
@@ -15,7 +15,7 @@ describe CruxRake::ToolLocator do
     end
 
     it 'should find tool based on file spec' do
-      result = CruxRake::ToolLocator.locate_tool('C:/Windows/Microsoft.NET/Framework/**/msbuild.exe')
+      result = Physique::ToolLocator.locate_tool('C:/Windows/Microsoft.NET/Framework/**/msbuild.exe')
       expect(result).to match(%r{v4.0}i)
     end
   end

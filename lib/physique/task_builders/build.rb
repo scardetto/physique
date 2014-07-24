@@ -1,4 +1,4 @@
-module CruxRake
+module Physique
   class CompileConfig
     attr_writer :configuration, # Build configuration (Release, Debug, etc.)
                 :logging        # MSBuild Logging level (normal, verbose, etc.)

@@ -1,7 +1,7 @@
 require 'active_support/core_ext/string'
 require 'map'
 
-module CruxRake
+module Physique
   module FluentMigrator
     class Cmd
       include Albacore::CrossPlatformCmd
@@ -38,7 +38,7 @@ module CruxRake
 
     class Config
       include Albacore::CmdConfig
-      include CruxRake::ToolLocator
+      include Physique::ToolLocator
       self.extend Albacore::ConfigDSL
 
       # SQL Server instance
@@ -148,7 +148,7 @@ module CruxRake
 
     class Task
       def initialize(opts)
-        @cmd = CruxRake::FluentMigrator::Cmd.new opts
+        @cmd = Physique::FluentMigrator::Cmd.new opts
       end
 
       def execute

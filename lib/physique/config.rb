@@ -1,4 +1,4 @@
-module CruxRake
+module Physique
   class MetadataConfig
     def initialize
       @metadata = default_metadata

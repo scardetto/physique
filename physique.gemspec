@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'cruxrake/version'
+require 'physique/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'cruxrake'
-  spec.version       = CruxRake::VERSION
+  spec.name          = 'physique'
+  spec.version       = Physique::VERSION
   spec.authors       = ['Robert Scaduto']
-  spec.email         = ['rscaduto@core4tek.com']
-  spec.description   = %q{Rake tasks for Crux applications}
-  spec.summary       = %q{Built in support for  }
-  spec.homepage      = 'http://github.com/core4tek/cruxrake'
+  spec.email         = ['rscaduto@thirdwave.it']
+  spec.description   = %q{Beautiful builds for .NET projects}
+  spec.summary       = %q{A conventional build framework supporting NUnit, FluentMigrator and Octopus Deploy}
+  spec.homepage      = 'http://github.com/scardetto/physique'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)

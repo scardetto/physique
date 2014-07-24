@@ -1,4 +1,4 @@
-module CruxRake
+module Physique
   class NugetConfig
     self.extend Albacore::ConfigDSL
 

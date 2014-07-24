@@ -1,4 +1,4 @@
-module CruxRake
+module Physique
   class TestConfig
     self.extend Albacore::ConfigDSL
 

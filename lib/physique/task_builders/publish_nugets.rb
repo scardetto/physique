@@ -1,6 +1,6 @@
-require 'cruxrake/config'
+require 'physique/config'
 
-module CruxRake
+module Physique
   class PublishNugetsConfig < MetadataConfig
     attr_writer :project_files, # Project files to include
                 :exclude,       # Project files to exclude

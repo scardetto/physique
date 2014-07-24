@@ -1,9 +1,9 @@
-require 'cruxrake'
+require 'physique'
 
-describe CruxRake::FluentMigratorConfig do
+describe Physique::FluentMigratorConfig do
   it 'should find full project path when specifying the name and language' do
     project_name = 'Test.Database'
-    opts = CruxRake::FluentMigratorConfig.new.tap { |c|
+    opts = Physique::FluentMigratorConfig.new.tap { |c|
       c.project = project_name
       c.lang = :vb
     }.opts
@@ -13,7 +13,7 @@ describe CruxRake::FluentMigratorConfig do
 
   it 'should default to the cs programming language' do
     project_name = 'Test.Database'
-    opts = CruxRake::FluentMigratorConfig.new.tap { |c|
+    opts = Physique::FluentMigratorConfig.new.tap { |c|
       c.project = project_name
     }.opts
 

@@ -1,7 +1,7 @@
 require 'xsemver'
 require 'albacore/logging'
 
-module Cruxrake
+module Physique
   module Tasks
     # Versionizer does versioning ITS OWN WAY!
     #

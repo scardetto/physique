@@ -1,7 +1,7 @@
 require 'albacore/logging'
-require 'cruxrake/tasks/nugets_pack'
+require 'physique/tasks/nugets_pack'
 
-module CruxRake
+module Physique
   module OctopusPack
     class Config
       attr_writer :project_file

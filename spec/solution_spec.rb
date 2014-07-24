@@ -1,9 +1,9 @@
-require 'cruxrake'
+require 'physique'
 
-describe CruxRake::CompileConfig do
+describe Physique::CompileConfig do
 
   describe 'By default' do
-    before(:all) { @config = CruxRake::CompileConfig.new }
+    before(:all) { @config = Physique::CompileConfig.new }
 
     it 'should set the build configuration to Release' do
       expect(@config.opts.configuration).to eq('Release')

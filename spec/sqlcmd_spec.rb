@@ -1,11 +1,11 @@
-require 'cruxrake'
-require 'cruxrake/tasks/sqlcmd'
+require 'physique'
+require 'physique/tasks/sqlcmd'
 
-describe CruxRake::SqlCmd::Config do
+describe Physique::SqlCmd::Config do
   if ::Rake::Win32.windows?
     describe 'When initialized with the minimum required values' do
       before(:all) do
-        @opts = CruxRake::SqlCmd::Config.new.tap { |c|
+        @opts = Physique::SqlCmd::Config.new.tap { |c|
           c.server_name = 'server'
           c.command = 'command'
         }.opts
@@ -26,7 +26,7 @@ describe CruxRake::SqlCmd::Config do
 
     describe 'When initialized with a command' do
       before(:all) do
-        @opts = CruxRake::SqlCmd::Config.new.tap { |c|
+        @opts = Physique::SqlCmd::Config.new.tap { |c|
           c.server_name = 'server'
           c.command = 'command'
         }.opts
@@ -43,7 +43,7 @@ describe CruxRake::SqlCmd::Config do
 
     describe 'When initialized with a file' do
       before(:all) do
-        @opts = CruxRake::SqlCmd::Config.new.tap { |c|
+        @opts = Physique::SqlCmd::Config.new.tap { |c|
           c.server_name = 'server'
           c.file = 'test.sql'
         }.opts
@@ -60,7 +60,7 @@ describe CruxRake::SqlCmd::Config do
 
     describe 'When initialized with both a file and a command' do
       before(:all) do
-        @opts = CruxRake::SqlCmd::Config.new.tap { |c|
+        @opts = Physique::SqlCmd::Config.new.tap { |c|
           c.server_name = 'server'
           c.command = 'command'
           c.file = 'file'
@@ -74,16 +74,16 @@ describe CruxRake::SqlCmd::Config do
   end
 end
 
-describe CruxRake::SqlCmd::Cmd do
+describe Physique::SqlCmd::Cmd do
   describe 'When configured with a file' do
     before(:all) do
-      opts = CruxRake::SqlCmd::Config.new.tap { |c|
+      opts = Physique::SqlCmd::Config.new.tap { |c|
         c.server_name = 'server'
         c.database_name = 'database'
         c.file = 'test.sql'
       }.opts
 
-      @cmd = CruxRake::SqlCmd::Cmd.new opts
+      @cmd = Physique::SqlCmd::Cmd.new opts
     end
 
     it 'should break on errors' do
@@ -105,12 +105,12 @@ describe CruxRake::SqlCmd::Cmd do
 
   describe 'When configured with a command' do
     before(:all) do
-      opts = CruxRake::SqlCmd::Config.new.tap { |c|
+      opts = Physique::SqlCmd::Config.new.tap { |c|
         c.server_name = 'server'
         c.command = 'command'
       }.opts
 
-      @cmd = CruxRake::SqlCmd::Cmd.new opts
+      @cmd = Physique::SqlCmd::Cmd.new opts
     end
 
     it 'should break on errors' do
@@ -128,14 +128,14 @@ describe CruxRake::SqlCmd::Cmd do
 
   describe 'When setting variables' do
     before(:all) do
-      opts = CruxRake::SqlCmd::Config.new.tap { |c|
+      opts = Physique::SqlCmd::Config.new.tap { |c|
         c.server_name = 'server'
         c.command = 'command'
         c.set_variable 'test_variable1', 'test_value1'
         c.set_variable 'test_variable2', 'test_value2'
       }.opts
 
-      @cmd = CruxRake::SqlCmd::Cmd.new opts
+      @cmd = Physique::SqlCmd::Cmd.new opts
     end
 
     it 'should add multiple variables to the command line' do

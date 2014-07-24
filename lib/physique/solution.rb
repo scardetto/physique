@@ -1,8 +1,8 @@
 require 'rake'
 require 'albacore'
-require 'cruxrake/tasks_builder'
+require 'physique/tasks_builder'
 
-module CruxRake
+module Physique
   class SolutionConfig
     self.extend Albacore::ConfigDSL
     include Albacore::Logging

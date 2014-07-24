@@ -1,8 +1,8 @@
 require 'albacore'
 require 'albacore/nuget_model'
-require 'cruxrake/config'
+require 'physique/config'
 
-module CruxRake
+module Physique
   class OctopusDeployConfig
     attr_writer :server,  # The server name of the deployment server
                 :api_key  # The API key of the deployment server
@@ -53,7 +53,7 @@ module CruxRake
       raise ArgumentError, 'You must specify the :type of project to deploy' if @type.blank?
       raise ArgumentError, "Project :type #{@type} is not supported." unless supported_types.include? @type
 
-      project_file_path = CruxRake::Project.get_path(@project, @lang)
+      project_file_path = Physique::Project.get_path(@project, @lang)
       _, project_file = File.split project_file_path
       project_name = File.basename(project_file, '.*')
 

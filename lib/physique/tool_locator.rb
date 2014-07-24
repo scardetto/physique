@@ -1,7 +1,7 @@
 require 'map'
 require 'albacore'
 
-module CruxRake
+module Physique
   module ToolLocator
     include Albacore::Logging
 

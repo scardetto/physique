@@ -1,6 +1,6 @@
-require 'cruxrake/project'
+require 'physique/project'
 
-describe CruxRake::Project do
+describe Physique::Project do
   it 'should echo the path when full project file name is provided' do
     project_name = 'test.csproj'
     expect(get_path(project_name)).to eq(project_name)
@@ -21,6 +21,6 @@ describe CruxRake::Project do
   end
 
   def get_path(name, ext = 'cs')
-    ::CruxRake::Project.get_path(name, ext)
+    ::Physique::Project.get_path(name, ext)
   end
 end
