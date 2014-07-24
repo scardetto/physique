@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    physique (0.2.0)
+    physique (0.2.2)
       activesupport (~> 4.1)
       albacore (= 2.0.0.rc.12)
       map (~> 6.5)
