@@ -80,7 +80,7 @@ module Physique
                                             work_dir: cwd,
                                             out: out
 
-        # Octopus packages don't confirm to NuGet standards so
+        # Octopus packages don't conform to NuGet standards so
         # disable package analysis to prevent unnecessary warnings.
         cmd.disable_package_analysis
 
