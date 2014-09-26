@@ -1,15 +1,17 @@
 require 'physique/config'
+require 'forwardable'
 
 module Physique
   class PublishNugetsConfig < MetadataConfig
+    extend Forwardable
+
     attr_writer :project_files, # Project files to include
                 :exclude,       # Project files to exclude
-                :local_path,    # Path to publish locally
-                :feed_url,      # Nuget feed to publish packages
-                :api_key        # Nuget API key
+                :local_path     # Path to publish locally
 
     def initialize
       super
+      @feeds = []
       @alias_tasks = true
     end
 
@@ -18,10 +20,7 @@ module Physique
       @alias_tasks = false
     end
 
-    def symbols_feed_url=(value)
-      @gen_symbols = true
-      @symbols_feed_url = value
-    end
+    def_delegators :default_feed, :feed_url=, :symbols_feed_url=, :api_key=
 
     def opts
       Map.new(
@@ -32,7 +31,8 @@ module Physique
         gen_symbols: @gen_symbols,
         symbols_feed_url: @symbols_feed_url,
         api_key: @api_key,
-        alias_tasks: @alias_tasks
+        alias_tasks: @alias_tasks,
+        feeds: @feeds.map { |f| f.opts }
       ).apply(
         local_path: 'C:/Nuget.Local'
       )
@@ -44,6 +44,45 @@ module Physique
 
     def exclude_or_default
       @exclude || /Tests/
+    end
+
+    private
+
+    def default_feed
+      @default_feed || create_default_feed
+    end
+
+    def create_default_feed
+      PublishNugetsFeedConfig.new.tap do |feed|
+        feed.name = 'default'
+        @default_feed = feed
+        @feeds << feed
+      end
+    end
+  end
+
+  class PublishNugetsFeedConfig
+    attr_writer :name,     # Name of the nuget feed
+                :feed_url, # Nuget feed to publish packages
+                :api_key   # Nuget API key
+
+    # Nuget feed to publish symbol packages
+    def symbols_feed_url=(value)
+      @gen_symbols = true
+      @symbols_feed_url = value
+    end
+
+    def opts
+      raise ArgumentError, 'You must specify a name for all nuget feeds' if @name.blank?
+      raise ArgumentError, "You must specify a feed_url for feed #{name}" if @feed_url.blank?
+
+      Map.new(
+        name: @name,
+        feed_url: @feed_url,
+        gen_symbols: @gen_symbols,
+        symbols_feed_url: @symbols_feed_url,
+        api_key: @api_key
+      )
     end
   end
 
