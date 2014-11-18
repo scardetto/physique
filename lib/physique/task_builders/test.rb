@@ -30,7 +30,6 @@ module Physique
         tests.exe = locate_tool("#{package_dir}/NUnit.Runners.*/tools/nunit-console.exe")
         tests.parameters.add('/labels')
         tests.parameters.add('/trace=Verbose')
-        tests.parameters.add('/exclude=PersistenceTest')
       end
       task.add_description 'Run unit tests'
     end
