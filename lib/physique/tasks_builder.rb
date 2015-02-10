@@ -3,8 +3,8 @@ require 'physique/tool_locator'
 
 module Physique
   class TasksBuilder
-    include Albacore::DSL
     include Albacore::Logging
+    include Physique::DSL
     include Physique::ToolLocator
 
     @subclasses = []

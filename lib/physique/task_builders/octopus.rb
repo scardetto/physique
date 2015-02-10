@@ -93,7 +93,7 @@ module Physique
       @options.apps.each do |a|
         namespace :octo do
           namespace :package do
-            task = octopus_pack_task a.name => [:versionizer, :test] do |o|
+            task = octopus_pack a.name => [:versionizer, :test] do |o|
               ensure_output_location solution.nuget.build_location
 
               o.project_file = a.project_file

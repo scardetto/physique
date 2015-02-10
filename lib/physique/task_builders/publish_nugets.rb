@@ -104,7 +104,7 @@ module Physique
 
     def add_package_nugets_task
       namespace :nuget do
-        task = nugets_pack_task :package => [ :versionizer, :test ] do |p|
+        task = nugets_pack :package => [ :versionizer, :test ] do |p|
           ensure_output_location solution.nuget.build_location
 
           p.configuration = solution.compile.configuration

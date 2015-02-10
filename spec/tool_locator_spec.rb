@@ -10,13 +10,20 @@ describe Physique::ToolLocator do
     end
 
     it 'should find tool based on file spec' do
-      result = locate_tool('C:/Program Files/Microsoft SQL Server/**/Tools/Binn/SQLCMD.EXE')
-      expect(result).to eq('C:/Program Files/Microsoft SQL Server/110/Tools/Binn/SQLCMD.EXE')
+      result = locate_tool('./spec/test_data/tool_locator/Program Files/Microsoft SQL Server/**/Tools/Binn/SQLCMD.exe.txt')
+      expect(result).to eq('./spec/test_data/tool_locator/Program Files/Microsoft SQL Server/110/Tools/Binn/SQLCMD.exe.txt')
     end
 
-    it 'should find tool based on file spec' do
-      result = Physique::ToolLocator.locate_tool('C:/Windows/Microsoft.NET/Framework/**/msbuild.exe')
+    MS_BUILD_PATH = './spec/test_data/tool_locator/Windows/Microsoft.NET/Framework/**/msbuild.exe.txt'
+
+    it 'should find latest version of a tool based on file spec' do
+      result = locate_tool(MS_BUILD_PATH)
       expect(result).to match(%r{v4.0}i)
+    end
+
+    it 'should find first version of a tool if specified' do
+      result = locate_tool(MS_BUILD_PATH, find_latest: false)
+      expect(result).to match(%r{v3.5}i)
     end
   end
 end

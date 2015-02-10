@@ -2,39 +2,9 @@ require 'albacore/dsl'
 
 # Reopen Albacore DSL to get at the pre-built tasks
 # There is probably a better way to do this but ```me == :ruby_noob```
-module Albacore
+module Physique
   module DSL
-    def asmver_task(*args, &block)
-      asmver *args, &block
-    end
-
-    def build_task(*args, &block)
-      build *args, &block
-    end
-
-    def nugets_restore_task(*args, &block)
-      nugets_restore *args, &block
-    end
-
-    def test_runner_task(*args, &block)
-      test_runner *args, &block
-    end
-
-    def sqlcmd_task(*args, &block)
-      sqlcmd *args, &block
-    end
-
-    def fluent_migrator_task(*args, &block)
-      fluent_migrator *args, &block
-    end
-
-    def nugets_pack_task(*args, &block)
-      nugets_pack *args, &block
-    end
-
-    def octopus_pack_task(*args, &block)
-      octopus_pack *args, &block
-    end
+    include Albacore::DSL
 
     private
 

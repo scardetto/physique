@@ -49,7 +49,7 @@ module Physique
     def opts
       Map.new({
         file: @file,
-        nuget: @nuget.opts && @nuget.opts,
+        nuget: @nuget && @nuget.opts,
         compile: @compilation && @compilation.opts,
         test: @tests && @tests.opts,
         migrator: @migrator && @migrator.opts,

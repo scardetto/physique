@@ -12,7 +12,7 @@ module Physique
     # The tool sorts any matching executables in descending order to that the most recent version is returned. To
     # change this behavior call the method with the reverse option.
     #
-    #   locate_tool 'C:/path/to/**/tool.exe', reverse: false
+    #   locate_tool 'C:/path/to/**/tool.exe', find_latest: false
     #
     # Throws a ToolNotFoundError if no tool could be found.
     def locate_tool(paths, options = {})
@@ -24,9 +24,9 @@ module Physique
 
       info { "Attempting to locate tool in the following paths #{paths}" }
       opts = Map.options(options)
-      opts = opts.apply :reverse => true
+      opts = opts.apply :find_latest => true
       paths = paths.collect { |p| which(p) }.compact.sort
-      paths = paths.reverse if opts[:reverse]
+      paths = paths.reverse if opts[:find_latest]
       tool = paths.first
 
       raise ToolNotFoundError, "Could not find tool in the following paths: \n #{paths}" if tool.nil?

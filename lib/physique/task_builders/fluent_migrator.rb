@@ -53,7 +53,7 @@ module Physique
       FileList["#{@options.scripts_dir}/*.sql"].each do |f|
         namespace :db do
           task_name = File.basename(f, '.*')
-          task = sqlcmd_task task_name do |s|
+          task = sqlcmd task_name do |s|
             s.file = f
             s.server_name = @options.instance
             s.set_variable 'DATABASE_NAME', @options.name
@@ -67,7 +67,7 @@ module Physique
       default_tasks(@options.name).each do |task_name,sql|
         unless Rake::Task.task_defined? "db:#{task_name.to_s}"
           namespace :db do
-            task = sqlcmd_task task_name do |s|
+            task = sqlcmd task_name do |s|
               s.command = sql
               s.server_name = @options.instance
               s.set_variable 'DATABASE_NAME', @options.name
@@ -99,7 +99,7 @@ module Physique
       require 'physique/tasks/fluent_migrator'
 
       namespace :db do
-        build_task :compile_db do |b|
+        build :compile_db do |b|
           b.target = [ 'Build' ]
           b.file = solution.migrator.project_file
           b.prop 'Configuration', solution.compile.configuration
@@ -109,11 +109,11 @@ module Physique
         block = lambda &method(:configure_migration)
 
         # Migrate up
-        task = fluent_migrator_task :migrate => [ :compile_db ], &block.curry.('migrate:up')
+        task = fluent_migrator :migrate => [ :compile_db ], &block.curry.('migrate:up')
         task.add_description 'Migrate database to the latest version'
 
         # Migrate down
-        task = fluent_migrator_task :rollback => [ :compile_db ], &block.curry.('rollback')
+        task = fluent_migrator :rollback => [ :compile_db ], &block.curry.('rollback')
         task.add_description 'Rollback the database to the previous version'
       end
     end

@@ -35,7 +35,7 @@ module Physique
     private
 
     def add_restore
-      task = nugets_restore_task :restore do |r|
+      task = nugets_restore :restore do |r|
         r.out = solution.nuget.restore_location
         r.exe = solution.nuget.exe
       end
