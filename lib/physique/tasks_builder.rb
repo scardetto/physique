@@ -1,9 +1,11 @@
+require 'rake/dsl_definition'
 require 'physique/dsl'
 require 'physique/tool_locator'
 
 module Physique
   class TasksBuilder
     include Albacore::Logging
+    include Rake::DSL
     include Physique::DSL
     include Physique::ToolLocator
 

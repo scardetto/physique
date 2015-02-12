@@ -79,8 +79,10 @@ module Physique
       return if @options.nil?
       return if @options.apps.blank?
 
-      add_octopus_package_tasks
-      add_octopus_publish_tasks
+      namespace :octo do
+        add_octopus_package_tasks
+        add_octopus_publish_tasks
+      end
 
       if @options.alias_tasks
         add_task_aliases
@@ -91,57 +93,52 @@ module Physique
 
     def add_octopus_package_tasks
       @options.apps.each do |a|
-        namespace :octo do
-          namespace :package do
-            task = octopus_pack a.name => [:versionizer, :test] do |o|
-              ensure_output_location solution.nuget.build_location
+        namespace :package do
+          desc "Package #{a.project} for Octopus deployment"
+          octopus_pack a.name => [:versionizer, :test] do |o|
+            ensure_output_location solution.nuget.build_location
 
-              o.project_file = a.project_file
-              o.type = a.type
-              o.configuration = solution.compile.configuration
-              o.exe = solution.nuget.exe
-              o.out = solution.nuget.build_location
-              o.metadata = a.metadata
-            end
-            task.add_description "Package #{a.project} for Octopus deployment"
+            o.project_file = a.project_file
+            o.type = a.type
+            o.configuration = solution.compile.configuration
+            o.exe = solution.nuget.exe
+            o.out = solution.nuget.build_location
+            o.metadata = a.metadata
           end
-
-          task = Rake::Task.define_task :package => all_octopus_app_tasks('package')
-          task.add_description 'Package all applications'
         end
       end
+
+      desc 'Package all applications'
+      task :package => all_octopus_app_tasks('package')
     end
 
     def add_octopus_publish_tasks
       nuget = solution.nuget
 
       @options.apps.each do |a|
-        namespace :octo do
-          namespace :publish do
-            task = Rake::Task.define_task a.name => [ "package:#{a.name}" ] do
-              package_location = Albacore::Paths.normalise_slashes "#{nuget.build_location}/#{a.project}.#{a.metadata.version}.nupkg"
-              sh "#{nuget.exe} push #{package_location} -ApiKey #{@options.api_key} -Source #{@options.server}"
-            end
-            task.add_description "Publish #{a.project} app to Octopus Server"
+        namespace :publish do
+          desc "Publish #{a.project} app to Octopus Server"
+          task a.name => [ "package:#{a.name}" ] do
+            package_location = Albacore::Paths.normalise_slashes "#{nuget.build_location}/#{a.project}.#{a.metadata.version}.nupkg"
+            sh "#{nuget.exe} push #{package_location} -ApiKey #{@options.api_key} -Source #{@options.server}"
           end
-
-          task = Rake::Task.define_task :publish => all_octopus_app_tasks('publish')
-          task.add_description 'Publish all apps to Octopus Server'
         end
       end
+
+      desc 'Publish all apps to Octopus Server'
+      task :publish => all_octopus_app_tasks('publish')
     end
 
     def all_octopus_app_tasks(task)
-      # It is assumed that this is called within the octo namespace
       @options.apps.map { |a| "#{task}:#{a.name}" }
     end
 
     def add_task_aliases
-      task = Rake::Task.define_task :package => [ 'octo:package' ]
-      task.add_description 'Package all applications'
+      desc 'Package all applications'
+      task :package => [ 'octo:package' ]
 
-      task = Rake::Task.define_task :publish => [ 'octo:publish' ]
-      task.add_description 'Publish apps to Octopus Server'
+      desc 'Publish apps to Octopus Server'
+      task :publish => [ 'octo:publish' ]
     end
   end
 end

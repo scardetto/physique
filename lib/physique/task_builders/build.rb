@@ -41,13 +41,13 @@ module Physique
     def add_compile_tasks
       block = lambda &method(:configure_build)
 
-      task = build :compile => [ :restore ], &block.curry.(%w(Clean Rebuild))
-      task.add_description 'Builds the solution'
+      desc 'Builds the solution'
+      build :compile => [ :restore ], &block.curry.(%w(Clean Rebuild))
 
       namespace :compile do
         solution.compile.targets.each do |t|
-          task = build t.downcase, &block.curry.(t)
-          task.add_description "Builds the solution using the #{t} target"
+          desc "Builds the solution using the #{t} target"
+          build t.downcase, &block.curry.(t)
         end
       end
     end

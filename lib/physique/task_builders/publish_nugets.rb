@@ -91,9 +91,11 @@ module Physique
       @options = solution.publish_nugets
       return if @options.nil?
 
-      add_package_nugets_task
-      add_publish_nugets_task
-      add_publish_nugets_local_task
+      namespace :nuget do
+        add_package_nugets_task
+        add_publish_nugets_task
+        add_publish_nugets_local_task
+      end
 
       if @options.alias_tasks
         add_task_aliases
@@ -103,39 +105,35 @@ module Physique
     private
 
     def add_package_nugets_task
-      namespace :nuget do
-        task = nugets_pack :package => [ :versionizer, :test ] do |p|
-          ensure_output_location solution.nuget.build_location
+      desc 'Package all nugets'
+      nugets_pack :package => [ :versionizer, :test ] do |p|
+        ensure_output_location solution.nuget.build_location
 
-          p.configuration = solution.compile.configuration
-          p.out           = solution.nuget.build_location
-          p.exe           = solution.nuget.exe
-          p.files         = @options.project_files
-          p.gen_symbols   if @options.gen_symbols
-          p.with_metadata do |m|
-            @options.metadata.set_fields.each do |attr|
-              eval "m.#{attr}= @options.metadata.#{attr}"
-            end
+        p.configuration = solution.compile.configuration
+        p.out           = solution.nuget.build_location
+        p.exe           = solution.nuget.exe
+        p.files         = @options.project_files
+        p.gen_symbols   if @options.gen_symbols
+        p.with_metadata do |m|
+          @options.metadata.set_fields.each do |attr|
+            eval "m.#{attr}= @options.metadata.#{attr}"
           end
         end
-        task.add_description 'Package all nugets'
       end
     end
 
     def add_publish_nugets_task
-      namespace :nuget do
-        task = Rake::Task.define_task :publish => [ 'nuget:package' ] do
-          raise ArgumentError, 'You must specify an :api_key to connect to the server' if @options.api_key.blank?
+      desc 'Publish nuget packages to feed'
+      task :publish => [ 'nuget:package' ] do
+        raise ArgumentError, 'You must specify an :api_key to connect to the server' if @options.api_key.blank?
 
-          nuget_project_names.each do |p|
-            sh nuget_publish_command(p, 'nupkg', @options.feed_url)
+        nuget_project_names.each do |p|
+          sh nuget_publish_command(p, 'nupkg', @options.feed_url)
 
-            if @options.gen_symbols
-              sh nuget_publish_command(p, 'symbols.nupkg', @options.symbols_feed_url)
-            end
+          if @options.gen_symbols
+            sh nuget_publish_command(p, 'symbols.nupkg', @options.symbols_feed_url)
           end
         end
-        task.add_description 'Publish nuget packages to feed'
       end
     end
 
@@ -146,13 +144,11 @@ module Physique
     def add_publish_nugets_local_task
       local_path = @options.local_path
 
-      namespace :nuget do
-        namespace :publish do
-          task = Rake::Task.define_task :local => [ 'nuget:package' ] do
-            ensure_output_location local_path
-            FileUtils.cp FileList["#{solution.nuget.build_location}/*"], local_path
-          end
-          task.add_description 'Copy nuget packages to local path'
+      namespace :publish do
+        desc 'Copy nuget packages to local path'
+        task :local => [ 'nuget:package' ] do
+          ensure_output_location local_path
+          FileUtils.cp FileList["#{solution.nuget.build_location}/*"], local_path
         end
       end
     end
@@ -162,11 +158,11 @@ module Physique
     end
 
     def add_task_aliases
-      task = Rake::Task.define_task :package => [ 'nuget:package' ]
-      task.add_description 'Package all nugets'
+      desc 'Package all nugets'
+      task :package => [ 'nuget:package' ]
 
-      task = Rake::Task.define_task :publish => [ 'nuget:publish' ]
-      task.add_description 'Publish nuget packages to feed'
+      desc 'Publish nuget packages to feed'
+      task :publish => [ 'nuget:publish' ]
     end
   end
 end

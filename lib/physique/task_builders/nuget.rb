@@ -29,17 +29,17 @@ module Physique
 
   class NugetTasksBuilder < TasksBuilder
     def build_tasks
-      add_restore
+      add_restore_task
     end
 
     private
 
-    def add_restore
-      task = nugets_restore :restore do |r|
+    def add_restore_task
+      desc 'Restores all nugets as per the packages.config files'
+      nugets_restore :restore do |r|
         r.out = solution.nuget.restore_location
         r.exe = solution.nuget.exe
       end
-      task.add_description 'Restores all nugets as per the packages.config files'
     end
   end
 end

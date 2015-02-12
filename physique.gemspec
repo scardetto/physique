@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rspec', '2.14.1'
+  spec.add_dependency 'rake', '~> 10'
   spec.add_dependency 'activesupport', '~> 4.1'
   spec.add_dependency 'map', '~> 6.5'
   spec.add_dependency 'albacore', '~> 2.3'
