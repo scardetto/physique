@@ -30,8 +30,12 @@ module Physique
     end
 
     def fluently_migrate
-      @migrator = FluentMigratorConfig.new
-      yield @migrator
+      @dbs_to_migrate = @dbs_to_migrate || []
+
+      migrator = FluentMigratorConfig.new
+      yield migrator
+
+      @dbs_to_migrate << migrator
     end
 
     alias_method :database, :fluently_migrate
@@ -52,9 +56,9 @@ module Physique
         nuget: @nuget && @nuget.opts,
         compile: @compilation && @compilation.opts,
         test: @tests && @tests.opts,
-        migrator: @migrator && @migrator.opts,
+        fluent_migrator_dbs: @dbs_to_migrate && @dbs_to_migrate.map {|db| db.opts },
         octopus: @octopus && @octopus.opts,
-        publish_nugets: @publish_nugets && @publish_nugets.opts,
+        publish_nugets: @publish_nugets && @publish_nugets.opts
       })
     end
   end

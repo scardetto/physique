@@ -26,18 +26,12 @@ module Physique
       package_dir = solution.nuget.restore_location
 
       desc 'Run unit tests'
-      test_runner :test => test_dependencies do |tests|
+      test_runner :test => :compile do |tests|
         tests.files = FileList["**/*.Tests/bin/#{configuration}/*.Tests.dll"]
         tests.exe = locate_tool("#{package_dir}/NUnit.Runners.*/tools/nunit-console.exe")
         tests.parameters.add('/labels')
         tests.parameters.add('/trace=Verbose')
       end
-    end
-
-    def test_dependencies
-      dependencies = [ :compile ]
-      dependencies << 'db:rebuild' unless solution.migrator.nil?
-      dependencies
     end
   end
 end
