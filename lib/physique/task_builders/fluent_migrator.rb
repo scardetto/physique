@@ -53,7 +53,7 @@ module Physique
   class FluentMigratorTasksBuilder < TasksBuilder
     def build_tasks
       dbs = solution.fluent_migrator_dbs
-      return if dbs.empty?
+      return if dbs.blank?
 
       dbs.each do |db|
         task_namespace = db_task_name(db)
