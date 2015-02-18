@@ -1,5 +1,4 @@
-require 'active_support/core_ext/string'
-require 'active_support/core_ext/array'
+require 'active_support/core_ext/object/blank'
 require 'physique/project'
 
 module Physique
