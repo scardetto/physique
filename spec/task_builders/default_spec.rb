@@ -8,7 +8,7 @@ describe 'basic' do
   let(:task) { rake[DEFAULT_TASK] }
 
   it 'should create the default task' do
-    rake.tasks.map{|t| t.name }.should include(DEFAULT_TASK)
+    task_names.should include(DEFAULT_TASK)
   end
 
   it 'should run default task without error' do

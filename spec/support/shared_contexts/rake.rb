@@ -4,6 +4,8 @@ shared_context 'rake' do
   let(:rake) { Rake::Application.new }
   let(:solution_name) { self.class.top_level_description }
   let(:solution_dir) { "spec/test_data/solutions/#{solution_name}" }
+  let(:task_names) { rake.tasks.map{|t| t.name } }
+
 
   before do
     @original_app = Rake.application
