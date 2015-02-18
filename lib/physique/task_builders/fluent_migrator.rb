@@ -61,7 +61,7 @@ module Physique
         namespace :db do
           namespace task_namespace do
             # First look at the scripts_dir and add a task for every sql file that you find
-            defaults = default_tasks(db)
+            defaults = default_tasks(db.name)
             add_script_tasks db, defaults
 
             # Then add the default minimum required tasks in case the scripts_dir didn't contain them
@@ -238,7 +238,7 @@ namespace #{project_name}.Migrations
         {
             // Add migration rollback code here
         }
-    }rake install
+    }
 }
 TEMPLATE
     end

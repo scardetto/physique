@@ -26,7 +26,7 @@ module Physique
         @parameters << "-S #{opts[:server_name]}"
         @parameters << "-d #{opts[:database_name]}" unless opts.blank? :database_name
         @parameters << "-i #{opts[:file]}" if opts[:source] == :file
-        @parameters << "-Q '#{opts[:command]}'" if opts[:source] == :command
+        @parameters << %{-Q "#{opts[:command]}"} if opts[:source] == :command
         @parameters << '-b' unless opts[:continue_on_error]
 
         opts[:variables].each do |k, v|

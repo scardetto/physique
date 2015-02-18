@@ -121,8 +121,8 @@ describe Physique::SqlCmd::Cmd do
       expect(@cmd.parameters).to include('-S server')
     end
 
-    it 'should include the command in single quotes' do
-      expect(@cmd.parameters).to include("-Q 'command'")
+    it 'should include the command in double quotes' do
+      expect(@cmd.parameters).to include('-Q "command"')
     end
   end
 
@@ -139,8 +139,8 @@ describe Physique::SqlCmd::Cmd do
     end
 
     it 'should add multiple variables to the command line' do
-      expect(@cmd.parameters).to include("-v test_variable1=test_value1")
-      expect(@cmd.parameters).to include("-v test_variable2=test_value2")
+      expect(@cmd.parameters).to include('-v test_variable1=test_value1')
+      expect(@cmd.parameters).to include('-v test_variable2=test_value2')
     end
   end
 end
