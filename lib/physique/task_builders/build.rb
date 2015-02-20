@@ -1,10 +1,16 @@
 module Physique
   class CompileConfig
-    attr_writer :configuration, # Build configuration (Release, Debug, etc.)
-                :logging        # MSBuild Logging level (normal, verbose, etc.)
+    attr_writer :default_targets, # Default build targets for compile task
+                :configuration,   # Build configuration (Release, Debug, etc.)
+                :logging          # MSBuild Logging level (normal, verbose, etc.)
 
     def initialize
-      @targets = []
+      @default_targets = %w(Clean Rebuild)
+      @targets = %w(Clean Build Rebuild)
+    end
+
+    def clear_targets
+      @targets.clear
     end
 
     def add_target(val)
@@ -12,9 +18,10 @@ module Physique
     end
 
     def opts
-      @targets = %w(Clean Build Rebuild) if @targets.blank?
+      raise ArgumentError, 'You must specify the default targets' if @default_targets.blank?
 
       Map.new({
+        default_targets: @default_targets,
         configuration: @configuration,
         logging: @logging,
         targets: @targets
@@ -42,7 +49,7 @@ module Physique
       block = lambda &method(:configure_build)
 
       desc 'Builds the solution'
-      build :compile => [ :restore ], &block.curry.(%w(Clean Rebuild))
+      build :compile => [ :restore ], &block.curry.(solution.compile.default_targets)
 
       namespace :compile do
         solution.compile.targets.each do |t|

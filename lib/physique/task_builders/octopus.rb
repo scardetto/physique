@@ -93,9 +93,9 @@ module Physique
 
     def add_octopus_package_tasks
       @options.apps.each do |a|
-        namespace :package do
+        namespace a.name do
           desc "Package #{a.project} for Octopus deployment"
-          octopus_pack a.name => [:versionizer, :test] do |o|
+          octopus_pack :package => [:versionizer, :test] do |o|
             ensure_output_location solution.nuget.build_location
 
             o.project_file = a.project_file
@@ -116,9 +116,9 @@ module Physique
       nuget = solution.nuget
 
       @options.apps.each do |a|
-        namespace :publish do
+        namespace a.name do
           desc "Publish #{a.project} app to Octopus Server"
-          task a.name => [ "package:#{a.name}" ] do
+          task :publish => [ "package:#{a.name}" ] do
             package_location = Albacore::Paths.normalise_slashes "#{nuget.build_location}/#{a.project}.#{a.metadata.version}.nupkg"
             sh "#{nuget.exe} push #{package_location} -ApiKey #{@options.api_key} -Source #{@options.server}"
           end
