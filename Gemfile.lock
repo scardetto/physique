@@ -1,11 +1,12 @@
 PATH
   remote: .
   specs:
-    physique (0.3.3)
+    physique (0.3.4)
       activesupport (~> 4.1)
       albacore (~> 2.3)
       map (~> 6.5)
       rake (~> 10)
+      semver2 (~> 3.4)
 
 GEM
   remote: https://rubygems.org/
