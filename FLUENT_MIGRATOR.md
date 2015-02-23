@@ -98,7 +98,7 @@ rake test                                # Run unit tests
 
 Look at all of our shiny database tasks!
 
-In case it wasn't obvious, all of the FluentMigrator tasks are prefixed with `db`. Here's a break down of each task does.
+In case it wasn't obvious, all of the FluentMigrator tasks are prefixed with `db`. Here's a break down of what each task does.
 
 ### Basic Tasks
 
