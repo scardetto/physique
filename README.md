@@ -212,7 +212,7 @@ end
 
 #### Custom Configuration
 
-You can use any unit testing framework. You just need to provide a bit more configuration.
+You can use any unit testing framework. You just need to provide a bit more configuration.  This effectively just wraps the Albacore method for declaring a test runner.
 
 ```ruby
 s.run_tests do |t|
@@ -250,8 +250,8 @@ Physique::Solution.new do |s|
 
     # Metadata to be included in your Nuspec
     p.with_metadata do |m|
-      m.description = 'Common libraries for crux applications'
-      m.authors = 'Robert Scaduto, Leo Hernandez'
+      m.description = 'My Awesome Library'
+      m.authors = 'My Company, Inc.'
     end
   end
 end
