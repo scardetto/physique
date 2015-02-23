@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basic", "Basic\Basic.csproj", "{AFDC274D-E5E5-4B37-AA08-4878AA382A12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basic.Specs", "Basic.Specs\Basic.Specs.csproj", "{85BD5CF1-C9BF-4F94-9063-C72C165A327C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4D4B3ACF-4969-4F83-9B84-DFEB7293CD76}"
+	ProjectSection(SolutionItems) = preProject
+		Rakefile.rb = Rakefile.rb
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basic.Migrations1", "Basic.Migrations1\Basic.Migrations1.csproj", "{C83D38D4-840D-4D0A-A44D-37B31BEF32A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basic.Migrations2", "Basic.Migrations2\Basic.Migrations2.csproj", "{82875A7D-7002-43B7-8931-8C73371C1945}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AFDC274D-E5E5-4B37-AA08-4878AA382A12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFDC274D-E5E5-4B37-AA08-4878AA382A12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFDC274D-E5E5-4B37-AA08-4878AA382A12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFDC274D-E5E5-4B37-AA08-4878AA382A12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85BD5CF1-C9BF-4F94-9063-C72C165A327C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85BD5CF1-C9BF-4F94-9063-C72C165A327C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85BD5CF1-C9BF-4F94-9063-C72C165A327C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85BD5CF1-C9BF-4F94-9063-C72C165A327C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C83D38D4-840D-4D0A-A44D-37B31BEF32A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C83D38D4-840D-4D0A-A44D-37B31BEF32A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C83D38D4-840D-4D0A-A44D-37B31BEF32A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C83D38D4-840D-4D0A-A44D-37B31BEF32A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82875A7D-7002-43B7-8931-8C73371C1945}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82875A7D-7002-43B7-8931-8C73371C1945}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82875A7D-7002-43B7-8931-8C73371C1945}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82875A7D-7002-43B7-8931-8C73371C1945}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

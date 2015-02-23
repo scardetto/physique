@@ -5,6 +5,14 @@ module Physique
   module ToolLocator
     include Albacore::Logging
 
+    @@registered_tools = {}
+
+    def register_tool(name, executable, nuget_package = nil, nuget_path = nil)
+    end
+
+    def lookup_tool(name, project, package_folder)
+    end
+
     # Allows you to locate a tool on disk given a file specification. For example...
     #
     #   locate_tool 'C:/Program Files/Microsoft SQL Server/**/Tools/Binn/SQLCMD.EXE'

@@ -14,9 +14,7 @@ describe Physique::FluentMigratorConfig do
 
   it 'should default to the cs programming language' do
     project_name = 'Test.Database'
-    opts = default_config do |c|
-      c.project = 'Test.Database'
-    end
+    opts = default_config
     expect(opts.project_file).to eq("src/#{project_name}/#{project_name}.csproj")
   end
 

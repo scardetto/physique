@@ -3,10 +3,10 @@ require 'support/shared_contexts/rake'
 describe 'basic' do
   include_context 'rake'
 
-  BUILD_TASKS = %w(versionizer compile compile:clean compile:build compile:rebuild)
+  let(:build_tasks) { %w(versionizer compile compile:clean compile:build compile:rebuild) }
 
   it 'should create the build tasks' do
-    BUILD_TASKS.each do |name|
+    build_tasks.each do |name|
       task_names.should include(name)
     end
   end

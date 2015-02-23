@@ -1,0 +1,2 @@
+﻿-- Do nothing.
+GO

@@ -53,7 +53,7 @@ module Physique
       raise ArgumentError, 'You must specify the :type of project to deploy' if @type.blank?
       raise ArgumentError, "Project :type #{@type} is not supported." unless supported_types.include? @type
 
-      project_file_path = Physique::Project.get_path(@project, @lang)
+      project_file_path = Physique::ProjectPathResolver.resolve(@project, @lang)
       _, project_file = File.split project_file_path
       project_name = File.basename(project_file, '.*')
 

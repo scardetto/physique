@@ -33,8 +33,8 @@ When installing Ruby DevKit, it should automatically register itself with the
 installed ruby version.  However, you may need to configure Ruby DevKit manually
 by running the following.
 
-    ```
-    $ cd \tools\DevKit2
-    $ echo "- C:/tools/ruby215" >> config.yml
-    $ ruby dk.rb install --force
-    ```
+```
+$ cd \tools\DevKit2
+$ echo "- C:/tools/ruby215" >> config.yml
+$ ruby dk.rb install --force
+```

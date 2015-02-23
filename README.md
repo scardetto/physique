@@ -21,7 +21,7 @@ You will need to [install Ruby](RUBY_SETUP.md) on your workstation and build ser
 
 Physique was designed to minimize the amount of ceremony in defining a build process.  It uses a set of practical conventions that when followed, eliminate most of the configuration required to set up your builds.
 
-Out of the box, Physique expects your repo to looks something like this:
+Out of the box, Physique expects your repo to look something like this:
 
     ├─ build                              # Compiled files
     │  └─ packages                        # Compiled packages will be built here.
@@ -116,7 +116,7 @@ The following describes the available configuration options.  Unless otherwise s
 
 ### NuGet Configuration
 
-You can customize how you want NuGet packages are handled in your solutions.
+You can customize how NuGet packages are handled in your solution.
 
 ```ruby
 Physique::Solution.new do |s|
@@ -306,7 +306,7 @@ Physique::Solution.new do |s|
     # For security it's a good idea to pass this in as an environment variable.
     octo.api_key = ENV['OCTOPUS_API_KEY']
 
-    # You can specify multiple apps for each project to deploy
+    # You can specify multiple apps to deploy
 
     # A hypothetical web application
     octo.deploy_app do |app|
@@ -315,7 +315,7 @@ Physique::Solution.new do |s|
 
       # App type
       # Valid options include :service, :website, :console
-      app.type = :web
+      app.type = :website
 
       # App project file
       app.project = 'src/MyProject.Website/MyProject.Website.csproj'
