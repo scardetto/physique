@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    physique (0.3.5)
+    physique (0.3.6)
       activesupport (~> 4.1)
       albacore (~> 2.3)
       map (~> 6.5)

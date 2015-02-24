@@ -118,7 +118,7 @@ module Physique
       @options.apps.each do |a|
         namespace a.name do
           desc "Publish #{a.project} app to Octopus Server"
-          task :publish => [ "package:#{a.name}" ] do
+          task :publish => [ "#{a.name}:package" ] do
             package_location = Albacore::Paths.normalise_slashes "#{nuget.build_location}/#{a.project}.#{a.metadata.version}.nupkg"
             sh "#{nuget.exe} push #{package_location} -ApiKey #{@options.api_key} -Source #{@options.server}"
           end
