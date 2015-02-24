@@ -130,7 +130,7 @@ module Physique
     end
 
     def all_octopus_app_tasks(task)
-      @options.apps.map { |a| "#{task}:#{a.name}" }
+      @options.apps.map { |a| "#{a.name}:#{task}" }
     end
 
     def add_task_aliases
