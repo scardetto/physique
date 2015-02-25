@@ -160,7 +160,7 @@ module Physique
       config.instance = db.instance
       config.database = db.name
       config.task = task
-      config.dll = db.output_dll
+      config.dll = %{"#{db.output_dll}"}
       config.exe = locate_tool(tool_in_output_folder(db) || tool_in_nuget_package)
       config.output_to_file
     end
