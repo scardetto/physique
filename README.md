@@ -1,6 +1,6 @@
 # Physique - Beautiful builds for .NET
 
-Physique is an opinionated build framework that allows you to create a professional build process for your solution with minimal configuration.  You tell physique a little about your solution, and it creates a complete set of rake tasks to build, test and package your apps for deployment.
+Physique is an opinionated build framework that allows you to create a professional build process for your solution with minimal configuration.  You tell Physique a little about your solution, and it creates a complete set of rake tasks to build, test and package your apps for deployment.
 
 ## Features
 
@@ -60,7 +60,7 @@ If your project doesn't look anything like this, don't worry, you can customize 
     $ bundle install
     ```
 
-* Physique uses the [semver2](https://github.com/haf/semver) gem to manage the version your solution. Use the included command line tool to create a `.semver` file for the solution.
+* Physique uses the [semver2](https://github.com/haf/semver) gem to manage the version of your solution. Use the included command line tool to create a `.semver` file for the solution.
 
     ```
     $ bundle exec semver init
@@ -180,7 +180,7 @@ Physique::Solution.new do |s|
 
   s.run_tests do |t|
     # Find all assemblies ending in '.Tests'
-    t.files = FileList["**/*.Tests/bin/#{configuration}/*.Tests.dll"]
+    t.files = FileList["**/*.Tests/bin/Release/*.Tests.dll"]
 
     # Default command line args
     t.parameters = ['/labels', '/trace=Verbose']
@@ -202,7 +202,7 @@ Physique::Solution.new do |s|
     t.runner = :nspec
 
     # The default method for finding NSpec assemblies
-    t.files = FileList["**/*.Specs/bin/#{configuration}/*.Specs.dll"]
+    t.files = FileList["**/*.Specs/bin/Release/*.Specs.dll"]
 
     # You can add additional command line args
     t.parameters = ['--failfast']
@@ -222,7 +222,7 @@ s.run_tests do |t|
   t.exe = 'root-relative-path/to/the/test-runner.exe'
 
   # Specify the test assemblies
-  t.files = FileList["**/*.Tests/bin/#{configuration}/*.Tests.dll"]
+  t.files = FileList["**/*.Tests/bin/Release/*.Tests.dll"]
 
   # Specify additional command line args
   t.parameters = ['/option1', '/option2']
@@ -350,6 +350,10 @@ rake octo:publish:web   # Publish MyProject.Website app to ...
 * Add support for additional databases.
 * Optionally use [Packet](https://github.com/fsprojects/Paket) instead of NuGet during `restore` phase
 * Mono support is possible but completely untested.
+
+## Acknowledgements
+
+Special thanks to [Henrik Feldt](https://github.com/haf) and [Amir Rajan](https://github.com/amirrajan) for the inspiration to make this project.
 
 ## Support
 
