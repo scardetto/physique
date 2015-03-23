@@ -24,6 +24,26 @@ describe 'fluent-migrator' do
   it 'should rebuild the database' do
     rake['db:rebuild'].invoke
   end
+
+  describe 'when creating migrations' do
+    let(:project_folder) { "Basic.Migrations" }
+    let(:project_file) { "#{project_folder}/Basic.Migrations.csproj" }
+    let!(:project_file_contents) { File.read(project_file) }
+
+    it 'should create a new migration' do
+      rake['db:new_migration'].invoke 'TestMigration', 'Test migration description'
+    end
+
+    after do
+      # Delete the created migrations files
+      FileUtils.rm_rf Dir.glob("#{project_folder}/Migrations/*")
+
+      # Restore the project file to it's original state
+      open(project_file, 'w') do |f|
+        f.puts project_file_contents
+      end
+    end
+  end
 end
 
 describe 'multiple-fluent-migrator' do

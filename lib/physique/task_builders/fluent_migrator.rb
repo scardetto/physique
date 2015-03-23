@@ -86,6 +86,7 @@ module Physique
 
     def expand_project_config(db)
       project = Albacore::Project.new(db.project_file)
+      db[:project_namespace] = project.namespace
       db[:project_dir] = project.proj_path_base
       db[:scripts_dir] = "#{project.proj_path_base}/#{db.scripts_dir}"
 
@@ -134,7 +135,10 @@ module Physique
     def add_migrator_tasks(db)
       require 'physique/tasks/fluent_migrator'
 
-      build :compile_db do |b|
+      # Compile just the database project.
+      # This task is registered as a dependency of the migration
+      # tasks to ensure the latest code is available.
+      build :compile_db => [ :restore ] do |b|
         b.target = [ 'Build' ]
         b.file = db.project_file
         b.prop 'Configuration', solution.compile.configuration
@@ -207,7 +211,7 @@ module Physique
         # Save the new migration file
         version = migration_version
         migration_file_name = "#{version}_#{name}.cs"
-        migration_content = migration_template(version, name, description, db.project)
+        migration_content = migration_template(version, name, description, db.project_namespace)
         save_file migration_content, "#{db.project_dir}/Migrations/#{migration_file_name}"
 
         # Add the new migration file to the project
@@ -222,12 +226,12 @@ module Physique
       Time.now.utc.strftime('%Y%m%d%H%M%S')
     end
 
-    def migration_template(version, name, description, project_name)
+    def migration_template(version, name, description, project_namespace)
       description = ", \"#{description}\"" unless description.nil?
       return <<TEMPLATE
 using FluentMigrator;
 
-namespace #{project_name}.Migrations
+namespace #{project_namespace}.Migrations
 {
     [Migration(#{version}#{description})]
     public class #{name} : Migration
