@@ -27,10 +27,7 @@ module Physique
         project_files: FileList[project_files_or_default].exclude(exclude_or_default),
         metadata: @metadata,
         local_path: @local_path,
-        feed_url: @feed_url,
         gen_symbols: @gen_symbols,
-        symbols_feed_url: @symbols_feed_url,
-        api_key: @api_key,
         alias_tasks: @alias_tasks,
         feeds: @feeds.map { |f| f.opts }
       ).apply(
@@ -125,13 +122,15 @@ module Physique
     def add_publish_nugets_task
       desc 'Publish nuget packages to feed'
       task :publish => [ 'nuget:package' ] do
-        raise ArgumentError, 'You must specify an :api_key to connect to the server' if @options.api_key.blank?
+        @options.feeds.select {|f| f.name = 'default'}
+
+        raise ArgumentError, 'You must specify an :api_key to connect to the server' if @options.default_feed.api_key.blank?
 
         nuget_project_names.each do |p|
-          sh nuget_publish_command(p, 'nupkg', @options.feed_url)
+          sh nuget_publish_command(p, 'nupkg', @options.default_feed.feed_url)
 
           if @options.gen_symbols
-            sh nuget_publish_command(p, 'symbols.nupkg', @options.symbols_feed_url)
+            sh nuget_publish_command(p, 'symbols.nupkg', @options.default_feed.symbols_feed_url)
           end
         end
       end
