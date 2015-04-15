@@ -27,7 +27,7 @@ module Physique
         targets: @targets
       }).apply(
         configuration: 'Release',
-        logging: 'normal'
+        logging: 'minimal'
       )
     end
   end
