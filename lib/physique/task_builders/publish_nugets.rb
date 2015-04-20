@@ -122,22 +122,23 @@ module Physique
     def add_publish_nugets_task
       desc 'Publish nuget packages to feed'
       task :publish => [ 'nuget:package' ] do
-        @options.feeds.select {|f| f.name = 'default'}
+        default_feed = @options.feeds.select {|f| f.name = 'default'}.first
+        api_key = default_feed.api_key
 
-        raise ArgumentError, 'You must specify an :api_key to connect to the server' if @options.default_feed.api_key.blank?
+        raise ArgumentError, 'You must specify an :api_key to connect to the server' if api_key.blank?
 
         nuget_project_names.each do |p|
-          sh nuget_publish_command(p, 'nupkg', @options.default_feed.feed_url)
+          sh nuget_publish_command(p, 'nupkg', default_feed.feed_url, api_key)
 
           if @options.gen_symbols
-            sh nuget_publish_command(p, 'symbols.nupkg', @options.default_feed.symbols_feed_url)
+            sh nuget_publish_command(p, 'symbols.nupkg', default_feed.symbols_feed_url, api_key)
           end
         end
       end
     end
 
-    def nuget_publish_command(name, extension, feed)
-      "#{solution.nuget.exe} push #{solution.nuget.build_location}/#{name}.#{@options.metadata.version}.#{extension} #{@options.api_key} -Source #{feed}"
+    def nuget_publish_command(name, extension, feed, api_key)
+      "#{solution.nuget.exe} push #{solution.nuget.build_location}/#{name}.#{@options.metadata.version}.#{extension} #{api_key} -Source #{feed}"
     end
 
     def add_publish_nugets_local_task
@@ -153,7 +154,9 @@ module Physique
     end
 
     def nuget_project_names
-      Set.new(@options.project_files.map { |f| Albacore::Project.new f }.map { |p| p.name })
+      Set.new(@options.project_files.
+            map { |f| Albacore::Project.new f }.
+            map { |p| p.name })
     end
 
     def add_task_aliases
