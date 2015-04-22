@@ -33,7 +33,7 @@
 
     ```
     $ cd \tools\DevKit2
-    $ echo "- C:/tools/ruby215" >> config.yml
+    $ echo - C:/tools/ruby215 >> config.yml
     $ ruby dk.rb install --force
     ```
 
