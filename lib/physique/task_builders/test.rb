@@ -36,12 +36,13 @@ module Physique
     def add_test_tasks
       options = solution.test
       defaults = default_runner_config options
+      files = options.files || defaults[:files]
 
       desc 'Run unit tests'
 
-      if defaults && !defaults[:files].blank?
+      if defaults && !files.blank?
         test_runner :test => :compile do |tests|
-          tests.files = options.files || defaults[:files]
+          tests.files = files
           tests.exe = options.exe || locate_tool(defaults[:exe])
 
           defaults[:parameters].each do |p|
@@ -63,11 +64,11 @@ module Physique
 
       defaults = {
         nunit: {
-          files: FileList["**/*Tests/bin/#{configuration}/*Tests.dll"],
-          exe: "#{package_dir}/NUnit.Runners.*/tools/nunit-console.exe",
-          parameters: %w(/labels /trace=Verbose)},
+            files: FileList["**/*.Tests/bin/#{configuration}/*.Tests.dll"],
+            exe: "#{package_dir}/NUnit.Runners.*/tools/nunit-console.exe",
+            parameters: %w(/labels /trace=Verbose)},
         nspec: {
-            files: FileList["**/*Specs/bin/#{configuration}/*Specs.dll"],
+            files: FileList["**/*.Specs/bin/#{configuration}/*.Specs.dll"],
             exe: "#{package_dir}/nspec.*/tools/NSpecRunner.exe",
             parameters: []}}
 
