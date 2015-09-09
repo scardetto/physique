@@ -37,16 +37,4 @@
     $ ruby dk.rb install --force
     ```
 
-* Update RubyGems to the latest version.
-
-  The SSL certificates that are currently included in the Windows distribution are outdated. To fix this, you need to jump through some hoops.
-  
-    ```
-    $ gem sources -r https://rubygems.org/ # Remove the SSL source
-    $ gem sources -a http://rubygems.org/  # Add the non-SSL source
-    $ gem update --system                  # Update RubyGems to the latest version
-    $ gem sources -r http://rubygems.org/  # Remove the non-SSL source
-    $ gem sources -a https://rubygems.org/ # Add the SSL source
-    ```
-  
 You should now be ready to Ruby!
