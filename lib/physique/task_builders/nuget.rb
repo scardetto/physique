@@ -12,6 +12,10 @@ module Physique
       @disable_package_analysis = true
     end
 
+    def disable_restore
+      @disable_restore = true
+    end
+
     def initialize
       @exe = 'src/.nuget/NuGet.exe'
       @restore_location = 'src/packages'
