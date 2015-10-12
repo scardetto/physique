@@ -71,7 +71,7 @@ module Physique
 
     def opts
       raise ArgumentError, 'You must specify a name for all nuget feeds' if @name.blank?
-      raise ArgumentError, "You must specify a feed_url for feed #{name}" if @feed_url.blank?
+      raise ArgumentError, "You must specify a feed_url for feed #{@name}" if @feed_url.blank?
 
       Map.new(
         name: @name,

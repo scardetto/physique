@@ -4,7 +4,8 @@ module Physique
 
     attr_path :exe,               # Path to nuget executable
               :restore_location,  # Path where nuget packages will be downloaded
-              :build_location     # Path where nuget packages will be built
+              :build_location,    # Path where nuget packages will be built
+              :disable_restore    # Disable the restore step
 
     # Disable metadata analysis (sets -NoPackageAnalysis flag)
     def disable_package_analysis
@@ -22,7 +23,8 @@ module Physique
         exe: @exe,
         restore_location: @restore_location,
         build_location: @build_location,
-        disable_package_analysis: !!@disable_package_analysis
+        disable_package_analysis: !!@disable_package_analysis,
+        disable_restore: !!@disable_restore
       })
     end
   end
@@ -36,9 +38,15 @@ module Physique
 
     def add_restore_task
       desc 'Restores all nugets as per the packages.config files'
-      nugets_restore :restore do |r|
-        r.out = solution.nuget.restore_location
-        r.exe = solution.nuget.exe
+      if solution.nuget.disable_restore
+        task :restore do
+          puts 'Nuget package restore skipped via configuration.'
+        end
+      else
+        nugets_restore :restore do |r|
+          r.out = solution.nuget.restore_location
+          r.exe = solution.nuget.exe
+        end
       end
     end
   end
