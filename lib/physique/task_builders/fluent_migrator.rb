@@ -88,15 +88,17 @@ module Physique
       project = Albacore::Project.new(db.project_file)
       db[:project_namespace] = project.namespace
       db[:project_dir] = project.proj_path_base
-      db[:scripts_dir] = "#{project.proj_path_base}/#{db.scripts_dir}"
+      db[:scripts_dir] = "#{db[:project_dir]}\\#{db.scripts_dir}"
 
       build_conf = solution.compile.configuration
       db[:output_path] = project.output_path build_conf
-      db[:output_dll] = File.expand_path("#{db.project_dir}/#{project.output_dll(build_conf)}")
+      db[:output_dll] = File.expand_path("#{db.project_dir}\\#{project.output_dll(build_conf)}")
     end
 
     def add_script_tasks(db, defaults)
-      FileList["#{db.scripts_dir}/*.sql"].each do |f|
+      # Need to keep the forward slashes for FileList.
+      scripts_dir = db.scripts_dir.gsub('\\', '/')
+      FileList["#{scripts_dir}/*.sql"].each do |f|
         task_name = File.basename(f, '.*')
 
         desc get_script_task_description(defaults, task_name, db)
@@ -129,7 +131,7 @@ module Physique
     def default_tasks(database)
       { create: { description: 'Create the database', command: "CREATE DATABASE #{database}" },
         drop: { description: 'Drop the database', command: "DROP DATABASE #{database}"},
-        seed: { description: 'Seed the database with test data', command: 'SELECT 1' } } # This is a no-op
+        seed: { description: 'Seed the database with test data', command: "SELECT 'No seed script found'" } }
     end
 
     def add_migrator_tasks(db)
@@ -188,6 +190,7 @@ module Physique
     end
 
     def existing_path(path)
+      path = path.gsub('\\', '/')
       return path if FileList[path].any? { |p| File.exists? p }
       nil
     end

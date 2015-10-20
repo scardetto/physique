@@ -36,7 +36,8 @@ module Physique
     end
 
     def project_files_or_default
-      @project_files || 'src/**/*.{csproj,fsproj,nuspec}'
+      files = @project_files || 'src/**/*.{csproj,fsproj,nuspec}'
+      files.gsub('\\', '/')
     end
 
     def exclude_or_default
@@ -148,7 +149,8 @@ module Physique
         desc 'Copy nuget packages to local path'
         task :local => [ 'nuget:package' ] do
           ensure_output_location local_path
-          FileUtils.cp FileList["#{solution.nuget.build_location}/*"], local_path
+          build_location = solution.nuget.build_location.gsub('\\', '/')
+          FileUtils.cp FileList["#{build_location}/*"], local_path
         end
       end
     end

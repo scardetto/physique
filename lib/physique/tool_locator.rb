@@ -25,9 +25,10 @@ module Physique
     # Throws a ToolNotFoundError if no tool could be found.
     def locate_tool(paths, options = {})
       # FileList only correctly handles forward-slashes, even on Windows
-      paths = paths.gsub('\\', '/')
+      raise ToolNotFoundError, 'No tool paths provided' unless paths
 
       debug { "Extracting paths from the following pattern #{paths}" }
+      paths = paths.gsub('\\', '/')
       paths = FileList[paths] unless paths.respond_to?(:each)
 
       debug { "Attempting to locate tool in the following paths #{paths}" }
