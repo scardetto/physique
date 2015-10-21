@@ -9,6 +9,10 @@ module Physique
       @targets = %w(Clean Build Rebuild)
     end
 
+    def disable_versioning
+      @disable_versioning = true
+    end
+
     def clear_targets
       @targets.clear
     end
@@ -24,7 +28,8 @@ module Physique
         default_targets: @default_targets,
         configuration: @configuration,
         logging: @logging,
-        targets: @targets
+        targets: @targets,
+        disable_versioning: !!@disable_versioning
       }).apply(
         configuration: 'Release',
         logging: 'minimal'
@@ -41,6 +46,8 @@ module Physique
     private
 
     def add_version_task
+      return if solution.compile.disable_versioning
+
       require 'albacore/tasks/versionizer'
       Albacore::Tasks::Versionizer.new :versionizer
     end
