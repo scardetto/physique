@@ -167,7 +167,7 @@ module Physique
       config.database = db.name
       config.task = task
       config.dll = %{"#{db.output_dll}"}
-      config.exe = locate_tool(tool_in_output_folder(db) || tool_in_nuget_package)
+      config.exe = locate_tool(tool_in_output_folder(db) || tool_in_nuget_package || tool_in_paket)
       config.output_to_file
     end
 
@@ -187,6 +187,10 @@ module Physique
 
     def tool_in_nuget_package
       existing_path "#{solution.nuget.restore_location}/FluentMigrator.*/tools/Migrate.exe"
+    end
+
+    def tool_in_paket
+      existing_path "packages/FluentMigrator/tools/Migrate.exe"
     end
 
     def existing_path(path)
