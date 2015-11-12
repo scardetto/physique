@@ -65,11 +65,11 @@ module Physique
       defaults = {
         nunit: {
             files: FileList["**/*.Tests/bin/#{configuration}/*.Tests.dll"],
-            exe: "#{package_dir}/NUnit.Runners.*/tools/nunit-console.exe",
+            exe: "#{package_dir}/NUnit.Runners*/tools/nunit-console.exe",
             parameters: %w(/labels /trace=Verbose)},
         nspec: {
             files: FileList["**/*.Specs/bin/#{configuration}/*.Specs.dll"],
-            exe: "#{package_dir}/nspec.*/tools/NSpecRunner.exe",
+            exe: "#{package_dir}/nspec*/tools/NSpecRunner.exe",
             parameters: []}}
 
       defaults[options.runner]
