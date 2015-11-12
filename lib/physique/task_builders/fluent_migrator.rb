@@ -186,7 +186,7 @@ module Physique
     end
 
     def tool_in_nuget_package
-      existing_path "#{solution.nuget.restore_location}/FluentMigrator.*/tools/Migrate.exe"
+      existing_path "#{solution.nuget.restore_location}/FluentMigrator*/tools/Migrate.exe"
     end
 
     def existing_path(path)
