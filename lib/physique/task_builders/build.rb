@@ -5,7 +5,7 @@ module Physique
                 :logging          # MSBuild Logging level (normal, verbose, etc.)
 
     def initialize
-      @default_targets = %w(Clean Rebuild)
+      @default_targets = %w(Rebuild)
       @targets = %w(Clean Build Rebuild)
     end
 

@@ -32,8 +32,7 @@ module Physique
       paths = FileList[paths] unless paths.respond_to?(:each)
 
       debug { "Attempting to locate tool in the following paths #{paths}" }
-      opts = Map.options(options)
-      opts = opts.apply :find_latest => true
+      opts = Map.options(options).apply :find_latest => true
       paths = paths.collect { |p| which(p) }.compact.sort
       paths = paths.reverse if opts[:find_latest]
       tool = paths.first
