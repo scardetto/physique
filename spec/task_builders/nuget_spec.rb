@@ -6,7 +6,7 @@ describe 'basic' do
   RESTORE_TASK = 'restore'
   let(:task) { rake[RESTORE_TASK] }
 
-  it 'should create the build tasks' do
+  it 'should create the test task' do
     task_names.should include(RESTORE_TASK)
   end
 
