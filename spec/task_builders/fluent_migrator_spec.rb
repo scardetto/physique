@@ -21,8 +21,10 @@ describe 'fluent-migrator' do
     end
   end
 
-  it 'should rebuild the database' do
-    rake['db:rebuild'].invoke
+  if ::Rake::Win32.windows?
+    it 'should rebuild the database' do
+      rake['db:rebuild'].invoke
+    end
   end
 
   describe 'when creating migrations' do

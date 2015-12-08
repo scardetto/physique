@@ -66,7 +66,7 @@ module Physique
         nunit: {
             files: FileList["**/*.Tests/bin/#{configuration}/*.Tests.dll"],
             exe: "#{package_dir}/NUnit.Runners*/tools/nunit-console.exe",
-            parameters: %w(/labels /trace=Verbose)},
+            parameters: %w(-labels -trace=Verbose)},
         nspec: {
             files: FileList["**/*.Specs/bin/#{configuration}/*.Specs.dll"],
             exe: "#{package_dir}/nspec*/tools/NSpecRunner.exe",

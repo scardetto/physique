@@ -42,7 +42,7 @@ module Physique
     end
 
     def which(exe)
-      Albacore::CrossPlatformCmd.which(exe) ? exe : nil;
+      Albacore::CrossPlatformCmd.which(exe) || File.exists?(exe) ? exe : nil;
     end
 
     class ToolNotFoundError < Exception; end

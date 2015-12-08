@@ -53,7 +53,7 @@ module Physique
     end
 
     def add_compile_tasks
-      block = lambda &method(:configure_build)
+      block = lambda(&method(:configure_build))
 
       desc 'Builds the solution'
       build :compile => [ :restore ], &block.curry.(solution.compile.default_targets)
