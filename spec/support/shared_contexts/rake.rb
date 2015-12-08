@@ -6,7 +6,6 @@ shared_context 'rake' do
   let(:solution_dir) { "spec/test_data/solutions/#{solution_name}" }
   let(:task_names) { rake.tasks.map{|t| t.name } }
 
-
   before do
     @original_app = Rake.application
     Dir.chdir(solution_dir)
