@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rspec', '2.14.1'
+  spec.add_development_dependency 'guard-rspec', '~> 4.3.1'
   spec.add_dependency 'rake', '~> 10'
   spec.add_dependency 'semver2', '~> 3.4'
   spec.add_dependency 'activesupport', '~> 4.1'
