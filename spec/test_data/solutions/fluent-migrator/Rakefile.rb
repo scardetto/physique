@@ -13,7 +13,7 @@ Physique::Solution.new do |s|
   end
 
   s.fluently_migrate do |t|
-    t.instance = '(local)'
+    t.instance = ENV['DATABASE_INSTANCE'] || '(local)'
     t.name = 'MyDatabase'
     t.project = 'Basic.Migrations/Basic.Migrations.csproj'
   end

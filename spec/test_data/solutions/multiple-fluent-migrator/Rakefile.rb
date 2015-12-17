@@ -14,14 +14,14 @@ Physique::Solution.new do |s|
 
   s.fluently_migrate do |t|
     t.task_alias = 'client'
-    t.instance = '(local)'
+    t.instance = ENV['DATABASE_INSTANCE'] || '(local)'
     t.name = 'MyDatabase'
     t.project = 'Basic.Migrations1\Basic.Migrations1.csproj'
   end
 
   s.fluently_migrate do |t|
     t.task_alias = 'server'
-    t.instance = '(local)'
+    t.instance = ENV['DATABASE_INSTANCE'] || '(local)'
     t.name = 'MyDatabase'
     t.project = 'Basic.Migrations2\Basic.Migrations2.csproj'
   end
