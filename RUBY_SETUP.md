@@ -20,9 +20,9 @@
 
     ```
     $ ruby --version
-    ruby 2.1.5p273 (2014-11-13 revision 48405) [x64-mingw32]
+    ruby 2.2.3p173 (2015-08-18 revision 51636) [x64-mingw32]
     ```
-    
+
 * Install Ruby DevKit.
 
     ```
@@ -33,7 +33,7 @@
 
     ```
     $ cd \tools\DevKit2
-    $ echo - C:/tools/ruby21 >> config.yml
+    $ echo - C:/tools/ruby22 >> config.yml
     $ ruby dk.rb install --force
     ```
 
