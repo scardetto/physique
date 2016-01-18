@@ -25,5 +25,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'semver2', '~> 3.4'
   spec.add_dependency 'activesupport', '~> 4.1'
   spec.add_dependency 'map', '~> 6.5'
-  spec.add_dependency 'albacore', '~> 2.3'
+  spec.add_dependency 'albacore', '~> 2.5'
 end
