@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    physique (0.3.10)
+    physique (0.4.0)
       activesupport (~> 4.1)
       albacore (~> 2.5)
       map (~> 6.5)
@@ -52,10 +52,6 @@ GEM
     minitest (5.8.3)
     nenv (0.2.0)
     nokogiri (1.6.7.2)
-      mini_portile2 (~> 2.0.0.rc2)
-    nokogiri (1.6.7.2-x64-mingw32)
-      mini_portile2 (~> 2.0.0.rc2)
-    nokogiri (1.6.7.2-x86-mingw32)
       mini_portile2 (~> 2.0.0.rc2)
     notiffany (0.0.8)
       nenv (~> 0.1)
