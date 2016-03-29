@@ -7,6 +7,7 @@ module Physique
     def initialize
       @default_targets = %w(Rebuild)
       @targets = %w(Clean Build Rebuild)
+      @props = {}
     end
 
     def disable_versioning
@@ -21,6 +22,10 @@ module Physique
       @targets << val
     end
 
+    def prop(name, value)
+      @props[name] = value
+    end
+
     def opts
       raise ArgumentError, 'You must specify the default targets' if @default_targets.blank?
 
@@ -29,7 +34,8 @@ module Physique
         configuration: @configuration,
         logging: @logging,
         targets: @targets,
-        disable_versioning: !!@disable_versioning
+        disable_versioning: !!@disable_versioning,
+        props: @props
       }).apply(
         configuration: 'Release',
         logging: 'minimal'
@@ -71,6 +77,10 @@ module Physique
       config.prop 'Configuration', solution.compile.configuration
       config.logging = solution.compile.logging
       config.target = target
+
+      solution.compile.props.each do |k,v|
+        config.prop k, v
+      end
     end
   end
 end
