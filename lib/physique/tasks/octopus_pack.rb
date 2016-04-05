@@ -112,7 +112,7 @@ module Physique
         @project.
           included_files.
           keep_if { |f| f.item_name == 'content' && f.item_name != 'packages.config' }.
-          each { |f| @package.add_file f.include, f.include}
+          each { |f| @package.add_file URI.unescape(f.include), URI.unescape(f.include) }
       end
 
       def add_binary_files(options = {})

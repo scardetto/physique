@@ -21,6 +21,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rspec', '2.14.1'
   spec.add_development_dependency 'guard-rspec', '~> 4.3.1'
+  spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'pry-byebug'
   spec.add_dependency 'activesupport', '~> 4.1'
   spec.add_dependency 'albacore', '~> 2.5'
   spec.add_dependency 'map', '~> 6.5'
