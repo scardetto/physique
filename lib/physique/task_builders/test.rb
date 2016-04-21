@@ -36,22 +36,15 @@ module Physique
     def add_test_tasks
       options = solution.test
       defaults = default_runner_config options
-      files = options.files || defaults[:files]
 
-      desc 'Run unit tests'
+      desc "Run #{options[:runner]} unit tests"
+      test_runner :test => :compile do |tests|
+        tests.files = options.files || defaults[:files]
+        tests.exe = options.exe || locate_tool(defaults[:exe])
 
-      if defaults && !files.blank?
-        test_runner :test => :compile do |tests|
-          tests.files = files
-          tests.exe = options.exe || locate_tool(defaults[:exe])
-
-          defaults[:parameters].each do |p|
-            tests.parameters.add(p)
-          end
-        end
-      else
-        task :test => :compile do
-          puts 'No test assemblies were detected'
+        options[:parameters] = defaults[:parameters] if options[:parameters].blank?
+        options[:parameters].each do |p|
+          tests.parameters.add(p)
         end
       end
     end
@@ -63,14 +56,18 @@ module Physique
       package_dir = solution.nuget.restore_location
 
       defaults = {
+        nunit3: {
+          files: FileList["**/*.Tests/bin/#{configuration}/*.Tests.dll"],
+          exe: "#{package_dir}/NUnit.ConsoleRunner*/tools/nunit3-console.exe",
+          parameters: %w(--labels=On --trace=Verbose --noresult)},
         nunit: {
-            files: FileList["**/*.Tests/bin/#{configuration}/*.Tests.dll"],
-            exe: "#{package_dir}/NUnit.Runners*/tools/nunit-console.exe",
-            parameters: %w(-labels -trace=Verbose)},
+          files: FileList["**/*.Tests/bin/#{configuration}/*.Tests.dll"],
+          exe: "#{package_dir}/NUnit.Runners*/tools/nunit-console.exe",
+          parameters: %w(-labels -trace=Verbose)},
         nspec: {
-            files: FileList["**/*.Specs/bin/#{configuration}/*.Specs.dll"],
-            exe: "#{package_dir}/nspec*/tools/NSpecRunner.exe",
-            parameters: []}}
+          files: FileList["**/*.Specs/bin/#{configuration}/*.Specs.dll"],
+          exe: "#{package_dir}/nspec*/tools/NSpecRunner.exe",
+          parameters: []}}
 
       defaults[options.runner]
     end
