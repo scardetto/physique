@@ -66,7 +66,7 @@ module Physique
       end
     end
 
-    def configure_build(target, config)
+    def configure_build(target, config, _args)
       config.sln = solution.file
       config.prop 'Configuration', solution.compile.configuration
       config.logging = solution.compile.logging
