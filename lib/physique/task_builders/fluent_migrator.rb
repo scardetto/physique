@@ -162,7 +162,7 @@ module Physique
       task :try => [ :migrate, :rollback ]
     end
 
-    def configure_migration(db, task, config)
+    def configure_migration(db, task, config, _args)
       config.instance = db.instance
       config.database = db.name
       config.task = task
