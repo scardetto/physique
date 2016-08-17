@@ -12,9 +12,9 @@ module Physique
     def sqlcmd(*args, &block)
       require 'physique/tasks/sqlcmd'
 
-      Albacore.define_task *args do
+      Albacore.define_task *args do |task_name, own_args|
         c = Physique::SqlCmd::Config.new
-        yield c
+        yield c, own_args
         Physique::SqlCmd::Task.new(c.opts).execute
       end
     end
@@ -23,9 +23,9 @@ module Physique
     def fluent_migrator(*args, &block)
       require 'physique/tasks/fluent_migrator'
 
-      Albacore.define_task *args do
+      Albacore.define_task *args do |task_name, own_args|
         c = Physique::FluentMigrator::Config.new
-        yield c
+        yield c, own_args
         Physique::FluentMigrator::Task.new(c.opts).execute
       end
     end
@@ -34,9 +34,9 @@ module Physique
     def octopus_pack(*args, &block)
       require 'physique/tasks/octopus_pack'
 
-      Albacore.define_task *args do
+      Albacore.define_task *args do |task_name, own_args|
         c = Physique::OctopusPack::Config.new
-        yield c
+        yield c, own_args
         Physique::OctopusPack::Task.new(c.opts).execute
       end
     end
