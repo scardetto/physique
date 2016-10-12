@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'pry-byebug'
   spec.add_dependency 'activesupport', '~> 4.1'
-  spec.add_dependency 'albacore', '~> 2.5'
+  spec.add_dependency 'albacore', '~> 2.6.2'
   spec.add_dependency 'map', '~> 6.5'
   spec.add_dependency 'rake', '~> 10'
   spec.add_dependency 'semver2', '~> 3.4'
