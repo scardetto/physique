@@ -1,0 +1,9 @@
+require 'physique'
+require 'albacore/ext/teamcity'
+require 'dotenv'
+
+Dotenv.load
+
+Physique::Solution.new do |s|
+  # s.file = 'The solution file'
+end
