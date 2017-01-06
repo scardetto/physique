@@ -27,7 +27,6 @@ module Physique
         project_files: FileList[project_files_or_default].exclude(exclude_or_default),
         metadata: @metadata,
         local_path: @local_path,
-        gen_symbols: @gen_symbols,
         alias_tasks: @alias_tasks,
         feeds: @feeds.map { |f| f.opts }
       ).apply(
@@ -131,7 +130,7 @@ module Physique
         nuget_project_names.each do |p|
           sh nuget_publish_command(p, 'nupkg', default_feed.feed_url, api_key)
 
-          if @options.gen_symbols
+          if default_feed.gen_symbols
             sh nuget_publish_command(p, 'symbols.nupkg', default_feed.symbols_feed_url, api_key)
           end
         end
