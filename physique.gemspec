@@ -28,4 +28,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'map', '~> 6.5'
   spec.add_dependency 'rake', '~> 10'
   spec.add_dependency 'semver2', '~> 3.4'
+  spec.add_dependency 'nokogiri', '~> 1.7'
 end
