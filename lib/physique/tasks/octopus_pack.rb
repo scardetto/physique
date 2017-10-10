@@ -120,7 +120,7 @@ module Physique
 
         output_path = get_output_path
         Dir.new(get_absolute_output_path).entries.
-          keep_if { |f| f =~ /^.*\.(dll|exe|pdb|config|sql)$/i}.
+          keep_if { |f| f =~ /^.*\.(dll|exe|pdb|config)$/i}.
           each { |f| @package.add_file bin_target(output_path, f), bin_target(target, f) }
       end
 
